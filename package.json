@@ -7,7 +7,7 @@
     "prestart": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
     "start": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
-    "test": "mocha --harmony --recursive test/router/middleware/resolver/*.js"
+    "test": "mocha --harmony --recursive test"
   },
   "author": "",
   "license": "MIT",

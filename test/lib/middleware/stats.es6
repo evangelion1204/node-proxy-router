@@ -5,7 +5,7 @@ const request = require('supertest')
 const chai = require('chai')
 const expect = chai.expect
 
-import middleware from '../../../router/middleware/stats'
+import middleware from '../../../lib/middleware/stats'
 
 describe('stats middlware', function() {
     let app
