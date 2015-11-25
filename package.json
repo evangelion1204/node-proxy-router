@@ -1,0 +1,26 @@
+{
+  "name": "architecture-draft",
+  "version": "0.0.1",
+  "description": "Containing a router and more",
+  "main": "router/index.js",
+  "scripts": {
+    "prestart": "babel . --extensions .es6 --out-dir .",
+    "pretest": "babel . --extensions .es6 --out-dir .",
+    "start": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
+    "test": "mocha --harmony --recursive test/router/middleware/resolver/*.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.2.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.2.0",
+    "babel-plugin-transform-es2015-parameters": "^6.1.18",
+    "chai": "^3.4.1",
+    "commander": "^2.9.0",
+    "koa": "^1.1.2",
+    "koa-convert": "^1.2.0",
+    "lodash": "^3.10.1",
+    "mocha": "^2.3.4",
+    "supertest": "^1.1.0"
+  }
+}

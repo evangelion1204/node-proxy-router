@@ -1,0 +1,24 @@
+{
+  "exact": [
+    {
+      "match": "/zalando-lounge",
+      "target": "http://www.zalando-lounge.de"
+    },
+    {
+      "match": "/zalando-lounge/contact",
+      "target": "https://www.zalando-lounge.de/contact"
+    },
+    {
+      "match": "/zl/aboutus",
+      "target": "http://www.zalando-lounge.de/aboutus"
+    }
+  ],
+  "startsWith": [
+    {
+      "match": "/zalando-lounge",
+      "target": "http://www.zalando-lounge.de",
+      "keepPath": true,
+      "trimMatch": true
+    }
+  ]
+}
