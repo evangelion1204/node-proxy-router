@@ -1,7 +1,7 @@
 'use strict'
 
 import Logger from '../lib/logger'
-import initStatsMiddleware from './middleware/stats'
+import initStatsMiddleware from '../lib/middleware/stats'
 import initExactResolverMiddleware from './middleware/resolver/exact'
 import initStartsWithResolverMiddleware from './middleware/resolver/startsWith'
 import initRequestMiddleware from './middleware/request'

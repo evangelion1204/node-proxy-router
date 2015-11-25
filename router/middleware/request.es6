@@ -50,10 +50,10 @@ export default function () {
             req.end()
         })
 
-        console.log(this.response.body.headers)
         this.response.set('Content-Type', this.response.body.headers['content-type'])
         this.response.set('Content-Encoding', this.response.body.headers['content-encoding'])
         this.response.set('Transfer-Encoding', this.response.body.headers['transfer-encoding'])
+        this.response.set('Content-Length', this.response.body.headers['content-length'])
 
         yield next
     }

@@ -4,9 +4,11 @@
   "description": "Containing a router and more",
   "main": "router/index.js",
   "scripts": {
-    "prestart": "babel . --extensions .es6 --out-dir .",
+    "prestart-router": "babel . --extensions .es6 --out-dir .",
+    "prestart-layout": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
-    "start": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
+    "start-router": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
+    "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/routes.json",
     "test": "mocha --harmony --recursive test"
   },
   "author": "",

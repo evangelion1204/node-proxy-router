@@ -11,6 +11,10 @@
     {
       "match": "/zl/aboutus",
       "target": "http://www.zalando-lounge.de/aboutus"
+    },
+    {
+      "match": "/login",
+      "target": "http://localhost:3002/login"
     }
   ],
   "startsWith": [

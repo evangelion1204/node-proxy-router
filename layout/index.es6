@@ -1,7 +1,7 @@
 'use strict'
 
 import Logger from '../lib/logger'
-import initStatsMiddleware from './middleware/stats'
+import initStatsMiddleware from '../lib/middleware/stats'
 
 const logger = Logger.instance()
 const program = require('commander')
@@ -20,10 +20,12 @@ if (configPath) {
     logger.log('Loading config file:', configPath)
 }
 
-const routes = require(configPath)
 const app = koa()
 
 app.use(initStatsMiddleware())
+app.use(function *() {
+    this.response.body = 'ok'
+})
 
 app.listen(port)
 
