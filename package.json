@@ -8,7 +8,7 @@
     "prestart-layout": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
     "start-router": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
-    "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/routes.json",
+    "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json",
     "test": "mocha --harmony --recursive test"
   },
   "author": "",
@@ -21,6 +21,7 @@
     "commander": "^2.9.0",
     "koa": "^1.1.2",
     "koa-convert": "^1.2.0",
+    "koa-hbs": "^0.7.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
     "supertest": "^1.1.0"
