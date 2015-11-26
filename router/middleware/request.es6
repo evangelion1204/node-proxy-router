@@ -4,7 +4,7 @@ import Logger from '../../lib/logger'
 
 const logger = Logger.instance()
 
-import request from '../../lib/request'
+import {request} from '../../lib/request'
 
 export default function () {
     return function *(next) {

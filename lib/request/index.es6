@@ -10,7 +10,7 @@ const url = require('url')
 
 const logger = Logger.instance()
 
-export default function (uri, headers = {}) {
+export function request(uri, headers = {}) {
     const parsedUrl = url.parse(uri)
     const protocol = isHttps(parsedUrl) ? https : http
 
@@ -19,6 +19,33 @@ export default function (uri, headers = {}) {
     return new Promise(function (resolve, reject) {
         var req = protocol.request(options, function(res) {
             resolve(res)
+        })
+
+        req.on('error', function(e) {
+            console.log('problem with request: ' + e.message)
+            reject(e)
+        })
+
+        req.end()
+    })
+}
+
+export function requestEndOfStream(uri, headers = {}) {
+    const parsedUrl = url.parse(uri)
+    const protocol = isHttps(parsedUrl) ? https : http
+
+    const options = buildOptions(parsedUrl, headers)
+
+    return new Promise(function (resolve, reject) {
+        var req = protocol.request(options, function(res) {
+            let completeData = ''
+            res.on('data', function (chunk) {
+                logger.debug(`Receiving chunk of length ${chunk.length}: ${chunk}`)
+                completeData += chunk
+            })
+            res.on('end', function () {
+                resolve(completeData)
+            })
         })
 
         req.on('error', function(e) {

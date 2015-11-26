@@ -6,9 +6,15 @@
   "scripts": {
     "prestart-router": "babel . --extensions .es6 --out-dir .",
     "prestart-layout": "babel . --extensions .es6 --out-dir .",
+    "prestart-catalog": "babel . --extensions .es6 --out-dir .",
+    "prestart-general": "babel . --extensions .es6 --out-dir .",
+    "prestart-legacy": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
     "start-router": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
     "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json",
+    "start-catalog": "node --harmony fragments/all.js --port 3005",
+    "start-general": "node --harmony fragments/all.js --port 3003",
+    "start-legacy": "node --harmony fragments/all.js --port 3004 ",
     "test": "mocha --harmony --recursive test"
   },
   "author": "",

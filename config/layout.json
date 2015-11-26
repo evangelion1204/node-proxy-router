@@ -3,6 +3,6 @@
     "header": "http://localhost:3003/header",
     "footer": "http://localhost:3003/footer",
     "register": "http://localhost:3004",
-    "catalog": "http://localhost:3005"
+    "catalog": "http://localhost:3005/catalog"
   }
 }
