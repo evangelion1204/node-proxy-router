@@ -4,23 +4,33 @@ import Logger from '../../lib/logger'
 
 const logger = Logger.instance()
 
-import {request} from '../../lib/request'
+import {request, post} from '../../lib/request'
 
 export default function () {
-    return function *(next) {
+    return function *() {
         if (!this.state.resolver) {
             yield next
 
             return
         }
 
-        this.response.body = yield request(this.state.resolver.mapping, this.request.headers)
+        let proxyResult
 
-        this.response.set('Content-Type', this.response.body.headers['content-type'])
-        this.response.set('Content-Encoding', this.response.body.headers['content-encoding'])
-        this.response.set('Transfer-Encoding', this.response.body.headers['transfer-encoding'])
-        this.response.set('Content-Length', this.response.body.headers['content-length'])
+        if (this.request.method !== 'POST') {
+            proxyResult = yield request(this.state.resolver.mapping, this.request.headers)
 
-        yield next
+            this.response.set(proxyResult.headers)
+            this.response.body = proxyResult.body
+        }
+        else {
+            console.log('POST')
+            proxyResult = yield post(this.state.resolver.mapping, this.request.headers, this.req)
+
+            this.response.status = proxyResult.statusCode
+            this.response.set(proxyResult.headers)
+            this.response.body = proxyResult.body
+
+            return
+        }
     }
 }

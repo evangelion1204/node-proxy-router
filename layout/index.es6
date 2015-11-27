@@ -35,7 +35,7 @@ app.use(hbs.middleware({
 app.use(initRenderMiddleware(hbs, config.endpoints))
 
 app.use(function *() {
-    yield this.renderAsync('login', {title: "login"})
+    yield this.renderAsync(this.request.path.replace(/$\//, ''), {title: "login"})
 })
 
 app.listen(port)

@@ -15,6 +15,15 @@
     {
       "match": "/login",
       "target": "http://localhost:3002/login"
+    },
+    {
+      "match": "/login",
+      "method": "POST",
+      "target": "http://localhost:3004"
+    },
+    {
+      "match": "/catalog",
+      "target": "http://localhost:3002/catalog"
     }
   ],
   "startsWith": [

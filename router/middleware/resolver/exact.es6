@@ -25,7 +25,7 @@ export default function (config = {exact: {}}) {
 
         logger.debug(`Exact matching for ${this.request.path}`)
 
-        if (!(route = routes[this.request.path])) {
+        if (!(route = routes[this.request.method][this.request.path])) {
             logger.log(`No mapping found for ${this.request.path}, skipping!`)
 
             yield next
@@ -49,20 +49,24 @@ function assertConfig(config) {
 }
 
 function prepareRoutes(routes) {
+    let finalRoutes = {
+        GET: [],
+        POST: []
+    }
     if (_.isArray(routes)) {
         return _.reduce(routes, function (result, route, key) {
-            result[route.match] = route
+            result[route.method || 'GET'][route.match] = route
 
             return result
-        }, {})
+        }, finalRoutes)
     }
 
     return _.reduce(routes, function (result, route, key) {
-        result[key] = !_.isString(route) ? route : {
+        result.GET[key] = !_.isString(route) ? route : {
             match: key,
             target: route
         }
 
         return result
-    }, {})
+    }, finalRoutes)
 }

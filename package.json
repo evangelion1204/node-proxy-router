@@ -12,9 +12,9 @@
     "pretest": "babel . --extensions .es6 --out-dir .",
     "start-router": "node --harmony router/index.js --port 3001 --config ../config/routes.json",
     "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json",
-    "start-catalog": "node --harmony fragments/all.js --port 3005",
+    "start-catalog": "node --harmony fragments/catalog.js --port 3005",
     "start-general": "node --harmony fragments/all.js --port 3003",
-    "start-legacy": "node --harmony fragments/all.js --port 3004 ",
+    "start-legacy": "node --harmony fragments/legacy.js --port 3004",
     "test": "mocha --harmony --recursive test"
   },
   "author": "",
@@ -26,10 +26,14 @@
     "chai": "^3.4.1",
     "commander": "^2.9.0",
     "koa": "^1.1.2",
+    "koa-body": "^1.3.0",
+    "koa-bodyparser": "^2.0.1",
     "koa-convert": "^1.2.0",
     "koa-hbs": "^0.7.0",
+    "koa-session": "^3.3.1",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
+    "request": "^2.67.0",
     "supertest": "^1.1.0"
   }
 }

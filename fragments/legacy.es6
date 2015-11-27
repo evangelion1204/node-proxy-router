@@ -8,6 +8,7 @@ const logger = Logger.instance()
 const program = require('commander')
 const koa = require('koa')
 const hbs = require('koa-hbs')
+const body = require('koa-body')
 
 program
     .version('0.0.1')
@@ -26,6 +27,7 @@ if (configPath) {
 
 const app = koa()
 
+app.use(body())
 session(app)
 app.use(initStatsMiddleware())
 app.use(hbs.middleware({
@@ -34,7 +36,30 @@ app.use(hbs.middleware({
 }))
 
 app.use(function *() {
-    this.response.body = this.request.path
+    console.log(this.session)
+
+    if (this.request.method == 'POST') {
+        logger.debug('Trying login with', this.request.body)
+
+        if (this.request.body.username === 'miiwersen' && this.request.body.password === '123456') {
+            logger.debug('Login successful')
+            this.session.user = {
+                username: this.request.body.username
+            }
+
+            this.response.redirect('/catalog')
+
+            return
+        } else {
+            logger.debug('Login failed, deleting session')
+            this.session = null
+            this.response.redirect('/login')
+
+            return
+        }
+    }
+
+    yield this.render('register')
 })
 
 app.listen(port)
