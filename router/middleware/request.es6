@@ -9,8 +9,6 @@ import {request, post} from '../../lib/request'
 export default function () {
     return function *() {
         if (!this.state.resolver) {
-            yield next
-
             return
         }
 
@@ -19,6 +17,7 @@ export default function () {
         if (this.request.method !== 'POST') {
             proxyResult = yield request(this.state.resolver.mapping, this.request.headers)
 
+            this.response.status = proxyResult.statusCode
             this.response.set(proxyResult.headers)
             this.response.body = proxyResult.body
         }
