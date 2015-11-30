@@ -14,16 +14,16 @@
     },
     {
       "match": "/login",
-      "target": "http://localhost:3002/login"
+      "target": "http://layout:3002/login"
     },
     {
       "match": "/login",
       "method": "POST",
-      "target": "http://localhost:3004"
+      "target": "http://legacy:3004"
     },
     {
       "match": "/catalog",
-      "target": "http://localhost:3002/catalog"
+      "target": "http://layout:3002/catalog"
     }
   ],
   "startsWith": [

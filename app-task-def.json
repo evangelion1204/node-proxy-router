@@ -1,0 +1,200 @@
+{
+  "containerDefinitions": [
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 3001,
+          "containerPort": 3001,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "npm",
+        "run",
+        "start-router"
+      ],
+      "mountPoints": [],
+      "name": "router",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": [
+        "layout",
+        "catalog",
+        "legacy",
+        "general"
+      ],
+      "workingDirectory": "/usr/src/app",
+      "readonlyRootFilesystem": null,
+      "image": "evangelion1204/new-architecture",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 128,
+      "privileged": null
+    },
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 3002,
+          "containerPort": 3002,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "npm",
+        "run",
+        "start-layout"
+      ],
+      "mountPoints": [],
+      "name": "layout",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": [
+        "catalog",
+        "legacy",
+        "general"
+      ],
+      "workingDirectory": "/usr/src/app",
+      "readonlyRootFilesystem": null,
+      "image": "evangelion1204/new-architecture",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 128,
+      "privileged": null
+    },
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 3003,
+          "containerPort": 3003,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "npm",
+        "run",
+        "start-general"
+      ],
+      "mountPoints": [],
+      "name": "general",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": null,
+      "workingDirectory": "/usr/src/app",
+      "readonlyRootFilesystem": null,
+      "image": "evangelion1204/new-architecture",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 128,
+      "privileged": null
+    },
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 3004,
+          "containerPort": 3004,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "npm",
+        "run",
+        "start-legacy"
+      ],
+      "mountPoints": [],
+      "name": "legacy",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": null,
+      "workingDirectory": "/usr/src/app",
+      "readonlyRootFilesystem": null,
+      "image": "evangelion1204/new-architecture",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 128,
+      "privileged": null
+    },
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 3005,
+          "containerPort": 3005,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "npm",
+        "run",
+        "start-catalog"
+      ],
+      "mountPoints": [],
+      "name": "catalog",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": null,
+      "workingDirectory": "/usr/src/app",
+      "readonlyRootFilesystem": null,
+      "image": "evangelion1204/new-architecture",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 128,
+      "privileged": null
+    }
+  ],
+  "volumes": [],
+  "family": "new-architecture"
+}
