@@ -2,6 +2,7 @@
 
 import Logger from '../lib/logger'
 import initStatsMiddleware from '../lib/middleware/stats'
+import initHealthCheckResolverMiddleware from '../lib/middleware/healthCheck'
 import initExactResolverMiddleware from './middleware/resolver/exact'
 import initStartsWithResolverMiddleware from './middleware/resolver/startsWith'
 import initRequestMiddleware from './middleware/request'
@@ -26,7 +27,8 @@ if (configPath) {
 const routes = require(configPath)
 const app = koa()
 
-app.use(initStatsMiddleware())
+app.use(initStatsMiddleware('router'))
+app.use(initHealthCheckResolverMiddleware())
 app.use(initExactResolverMiddleware(routes))
 app.use(initStartsWithResolverMiddleware(routes))
 app.use(initRequestMiddleware())

@@ -3,6 +3,7 @@
 import {request} from '../../lib/request'
 import Logger from '../../lib/logger'
 
+const _ = require('lodash')
 const logger = Logger.instance()
 
 export default function (hbs, contentEndpoints) {
@@ -19,7 +20,14 @@ export default function (hbs, contentEndpoints) {
             handleNonSuccessResponses(asyncResponses, this)
 
             for (let name in asyncResponses) {
-                this.response.body = this.response.body.replace(`@@async/${name}`, asyncResponses[name].body)
+                let response = asyncResponses[name]
+
+                this.response.body = this.response.body.replace(`@@async/${name}`, response.body)
+
+                let responseHeader = _.find(response.headers, (headerValue, headerName) => headerName.startsWith('x-response'))
+                if (responseHeader !== undefined) {
+                    this.response.set(`x-response-time-${name}`, responseHeader)
+                }
             }
         }
 

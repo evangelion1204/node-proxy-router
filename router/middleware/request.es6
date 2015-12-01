@@ -7,7 +7,7 @@ const logger = Logger.instance()
 
 import {request, post} from '../../lib/request'
 
-const proxyHeaders = ['location', 'set-cookie', 'expires', 'cache-control']
+const proxyPickHeaders = ['location', 'set-cookie', 'expires', 'cache-control']
 
 export default function () {
     return function *() {
@@ -22,17 +22,24 @@ export default function () {
 
             this.response.body = proxyResult.body
             this.response.status = proxyResult.statusCode
-            this.response.set(_.pick(proxyResult.headers, proxyHeaders))
+            this.response.set(extractHeadersToProxy(proxyResult.headers))
         }
         else {
-            console.log('POST')
             proxyResult = yield post(this.state.resolver.mapping, this.request.headers, this.req)
 
             this.response.body = proxyResult.body
             this.response.status = proxyResult.statusCode
-            this.response.set(_.pick(proxyResult.headers, proxyHeaders))
+            this.response.set(extractHeadersToProxy(proxyResult.headers))
 
             return
         }
     }
+}
+
+function extractHeadersToProxy(headers) {
+    return _.extend(
+        {},
+        _.pick(headers, proxyPickHeaders),
+        _.pick(headers, function (value, key) {return key.startsWith('x-response')})
+    )
 }

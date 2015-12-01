@@ -29,7 +29,7 @@ const app = koa()
 
 app.use(body())
 session(app)
-app.use(initStatsMiddleware())
+app.use(initStatsMiddleware('legacy'))
 app.use(hbs.middleware({
     viewPath: __dirname + '/views',
     extname: '.handlebars'

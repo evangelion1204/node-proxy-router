@@ -27,7 +27,7 @@ const app = koa()
 
 console.log(__dirname)
 
-app.use(initStatsMiddleware())
+app.use(initStatsMiddleware('layout'))
 app.use(hbs.middleware({
     viewPath: __dirname + '/views',
     extname: '.handlebars'

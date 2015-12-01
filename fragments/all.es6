@@ -27,7 +27,7 @@ if (configPath) {
 const app = koa()
 
 session(app)
-app.use(initStatsMiddleware())
+app.use(initStatsMiddleware('general'))
 app.use(hbs.middleware({
     viewPath: __dirname + '/views',
     extname: '.handlebars'
