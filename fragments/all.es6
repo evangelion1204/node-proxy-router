@@ -34,7 +34,7 @@ app.use(hbs.middleware({
 }))
 
 app.use(function *() {
-    this.response.body = this.request.path
+    yield this.render(this.request.path)
 })
 
 app.listen(port)
