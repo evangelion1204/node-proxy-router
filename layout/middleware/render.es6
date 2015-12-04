@@ -29,11 +29,19 @@ class StreamHbs {
     }
 
     initHelpers() {
-        this.handlebars.registerHelper('content', function(value, options) {
-            logger.debug(`Fetching content for ${value} via ${this.contentEndpoints[value]}`)
-            options.data.koa.state.async[value] = request(this.contentEndpoints[value], options.data.koa.request.headers)
+        this.handlebars.registerHelper('content', function(name, options) {
+            logger.debug(`Fetching content for ${name} via ${this.contentEndpoints[name]}`)
+            options.data.koa.state.async[name] = request(this.contentEndpoints[name], options.data.koa.request.headers)
 
-            return `<div id="async-${value}"></div>`;
+            return `<div id="async-${name}"></div>`
+        }.bind(this))
+
+        this.handlebars.registerHelper('primary', function(name, options) {
+            logger.debug(`Fetching content for ${name} via ${this.contentEndpoints[name]}`)
+            options.data.koa.state.async[name] = request(this.contentEndpoints[name], options.data.koa.request.headers)
+            options.data.koa.state.async[name].primary = true
+
+            return `<div id="async-${name}"></div>`
         }.bind(this))
     }
 
@@ -72,7 +80,9 @@ class StreamHbs {
     *injectAsyncContent(output, koa) {
         let asyncResponses = yield this.getAsyncContent(koa)
 
-        handleNonSuccessResponses(asyncResponses, koa)
+        if (this.handlePrimaryResponse(asyncResponses, koa)) {
+            return false
+        }
 
         for (let name in asyncResponses) {
             let response = asyncResponses[name]
@@ -85,6 +95,28 @@ class StreamHbs {
         }
 
         return output
+    }
+
+    handlePrimaryResponse(asyncResponses, koa) {
+        let primaryName = _.findKey(this.getAsyncContent(koa), (content) => content.primary === true)
+
+        console.log('primaryName', primaryName)
+
+        if (!primaryName) {
+            return
+        }
+
+        let response = asyncResponses[primaryName]
+
+        console.log(response)
+
+        if (response.statusCode !== 200) {
+            koa.response.status = response.statusCode
+            koa.response.set(response.headers)
+            koa.response.body = response.body
+
+            return true
+        }
     }
 
     getAsyncContent(koa) {
@@ -114,6 +146,13 @@ class View {
 
         if (this.mode === 'parallel') {
             output = yield this.engine.injectAsyncContent(output, this.koa)
+
+            if (output === false) {
+                // close view
+                this.close()
+                return
+            }
+
             this.push(output)
         } else {
             this.push(output)
@@ -131,6 +170,10 @@ class View {
             yield asyncContent
         }
 
+        this.close()
+    }
+
+    close() {
         this.push(null)
     }
 
@@ -157,8 +200,7 @@ export default function (options, contentEndpoints) {
     }
 }
 
-
-function handleNonSuccessResponses(asyncResponses, ctx) {
+function handlePrimaryResponse(asyncResponses, ctx) {
     for (let name in asyncResponses) {
         let response = asyncResponses[name]
         if (response.statusCode !== 200) {
