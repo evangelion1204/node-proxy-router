@@ -36,8 +36,6 @@ app.use(hbs.middleware({
 }))
 
 app.use(function *() {
-    console.log(this.session)
-
     if (this.request.method == 'POST') {
         logger.debug('Trying login with', this.request.body)
 

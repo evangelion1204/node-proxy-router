@@ -7,7 +7,6 @@ import initRenderMiddleware from './middleware/render'
 const logger = Logger.instance()
 const program = require('commander')
 const koa = require('koa')
-const hbs = require('koa-hbs')
 
 program
     .version('0.0.1')
@@ -28,14 +27,16 @@ const app = koa()
 console.log(__dirname)
 
 app.use(initStatsMiddleware('layout'))
-app.use(hbs.middleware({
+app.use(initRenderMiddleware({
     viewPath: __dirname + '/views',
     extname: '.handlebars'
-}))
-app.use(initRenderMiddleware(hbs, config.endpoints))
+}, config.endpoints))
 
 app.use(function *() {
-    yield this.renderAsync(this.request.path.replace(/$\//, ''), {title: "login"})
+    console.log(this.request.query)
+    this.view.mode = this.request.query.mode || 'parallel'
+    this.view.template = this.request.path.replace(/$\//, '')
+    this.view.values = {title: "login"}
 })
 
 app.listen(port)
