@@ -100,15 +100,11 @@ class StreamHbs {
     handlePrimaryResponse(asyncResponses, koa) {
         let primaryName = _.findKey(this.getAsyncContent(koa), (content) => content.primary === true)
 
-        console.log('primaryName', primaryName)
-
         if (!primaryName) {
             return
         }
 
         let response = asyncResponses[primaryName]
-
-        console.log(response)
 
         if (response.statusCode !== 200) {
             koa.response.status = response.statusCode
@@ -197,18 +193,5 @@ export default function (options, contentEndpoints) {
 
         co.wrap(this.view.render).call(this.view).catch(this.onerror)
 
-    }
-}
-
-function handlePrimaryResponse(asyncResponses, ctx) {
-    for (let name in asyncResponses) {
-        let response = asyncResponses[name]
-        if (response.statusCode !== 200) {
-            ctx.response.status = response.statusCode
-            ctx.response.set(response.headers)
-            ctx.response.body = response.body
-
-            return
-        }
     }
 }
