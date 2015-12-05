@@ -2,12 +2,29 @@
 
 import Logger from '../../lib/logger'
 const _ = require('lodash')
+const Readable = require('stream').Readable
+const util = require('util')
 
 const logger = Logger.instance()
 
-import {request, post} from '../../lib/request'
+import {request, requestStream, post} from '../../lib/request'
 
 const proxyPickHeaders = ['location', 'set-cookie', 'expires', 'cache-control']
+
+class ResponseStream {
+    constructor() {
+        Readable.call(this)
+    }
+
+    _read() {}
+
+    end() {
+        this.push(null)
+    }
+}
+
+util.inherits(ResponseStream, Readable)
+
 
 export default function () {
     return function *() {
@@ -18,11 +35,25 @@ export default function () {
         let proxyResult
 
         if (this.request.method !== 'POST') {
-            proxyResult = yield request(this.state.resolver.mapping, this.request.headers)
+            this.response.body = new ResponseStream()
+            this.response.type = 'html'
 
-            this.response.body = proxyResult.body
-            this.response.status = proxyResult.statusCode
-            this.response.set(extractHeadersToProxy(proxyResult.headers))
+            let stream = requestStream(this.state.resolver.mapping, this.request.header)
+
+            stream.on('response', function (response) {
+                this.response.status = response.statusCode
+                this.response.set(extractHeadersToProxy(response.headers))
+            }.bind(this))
+
+            stream.on('data', function (data) {
+                this.response.body.push(data)
+            }.bind(this))
+
+            stream.on('end', function () {
+                this.response.body.end()
+            }.bind(this))
+
+
         }
         else {
             proxyResult = yield post(this.state.resolver.mapping, this.request.headers, this.req)

@@ -19,6 +19,13 @@ export function request(uri, headers = {}) {
     })
 }
 
+export function requestStream(uri, headers = {}) {
+    let requestHeaders = _.clone(headers)
+    delete requestHeaders['host']
+
+    return nodeRequest.get({url: uri, headers: requestHeaders, followRedirect: false, gzip: true})
+}
+
 export function post(uri, headers = {}, payload) {
     let requestHeaders = _.clone(headers)
     delete requestHeaders['host']

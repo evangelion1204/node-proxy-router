@@ -12,10 +12,12 @@ program
     .version('0.0.1')
     .option('-c, --config [Path to config]', 'The to be used config', '')
     .option('-p, --port [Port]', 'The used port', 3000)
+    .option('-m, --mode [Mode]', 'The mode (bigbipe/parallel', 'parallel')
     .parse(process.argv)
 
 const port = program.port
 const configPath = program.config
+const renderMode = program.mode
 
 if (configPath) {
     logger.log('Loading config file:', configPath)
@@ -34,7 +36,7 @@ app.use(initRenderMiddleware({
 
 app.use(function *() {
     console.log(this.request.query)
-    this.view.mode = this.request.query.mode || 'parallel'
+    this.view.mode = this.request.query.mode || renderMode
     this.view.template = this.request.path.replace(/$\//, '')
     this.view.values = {title: "login"}
 })
