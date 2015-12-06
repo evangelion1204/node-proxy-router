@@ -1,6 +1,6 @@
 'use strict'
 
-import {request} from '../../lib/request'
+import {request, requestStream} from '../../lib/request'
 import Logger from '../../lib/logger'
 const Readable = require('stream').Readable
 
@@ -38,8 +38,21 @@ class StreamHbs {
 
         this.handlebars.registerHelper('primary', function(name, options) {
             logger.debug(`Fetching content for ${name} via ${this.contentEndpoints[name]}`)
-            options.data.koa.state.async[name] = request(this.contentEndpoints[name], options.data.koa.request.headers)
+            let primaryStream = requestStream(this.contentEndpoints[name], options.data.koa.request.headers, function noop() {})
+
+            options.data.koa.state.async[name] = new Promise(function (resolve) {
+                primaryStream.on('complete', function (response) {
+                    resolve(response)
+                })
+            })
             options.data.koa.state.async[name].primary = true
+
+            options.data.koa.view.primaryOnResponsePromise = new Promise(function (resolve) {
+                primaryStream.on('response', function (response) {
+                    resolve(response)
+                })
+            })
+
 
             return `<div id="async-${name}"></div>`
         }.bind(this))
@@ -80,7 +93,7 @@ class StreamHbs {
     *injectAsyncContent(output, koa) {
         let asyncResponses = yield this.getAsyncContent(koa)
 
-        if (this.handlePrimaryResponse(asyncResponses, koa)) {
+        if (this.handlePrimaryResponse(this.getPrimaryResponse(asyncResponses, koa), koa)) {
             return false
         }
 
@@ -97,19 +110,26 @@ class StreamHbs {
         return output
     }
 
-    handlePrimaryResponse(asyncResponses, koa) {
+    getPrimaryResponse(asyncResponses, koa) {
         let primaryName = _.findKey(this.getAsyncContent(koa), (content) => content.primary === true)
 
         if (!primaryName) {
             return
         }
 
-        let response = asyncResponses[primaryName]
+        return asyncResponses[primaryName]
+    }
 
-        if (response.statusCode !== 200) {
-            koa.response.status = response.statusCode
-            koa.response.set(response.headers)
-            koa.response.body = response.body
+    handlePrimaryResponse(primary, koa) {
+        if (!primary)
+            return
+
+        console.log(primary.headers)
+
+        if (primary.statusCode !== 200) {
+            koa.response.status = primary.statusCode
+            koa.response.set(primary.headers)
+            koa.response.body = primary.body
 
             return true
         }
@@ -151,9 +171,18 @@ class View {
 
             this.push(output)
         } else {
-            this.push(output)
-
             let asyncContent = this.engine.getAsyncContent(this.koa)
+
+            if (this.primaryOnResponsePromise) {
+                let primaryResponse = yield this.primaryOnResponsePromise
+
+                if (this.engine.handlePrimaryResponse(primaryResponse, this.koa)) {
+                    this.close()
+                    return
+                }
+            }
+
+            this.push(output)
 
             for (let name in asyncContent) {
                 let promise = asyncContent[name]
