@@ -56,6 +56,14 @@ class StreamHbs {
 
             return `<div id="async-${name}"></div>`
         }.bind(this))
+
+        this.handlebars.registerHelper('styles', function() {
+            return '<link type="text/css" href="http://cdn:3006/base.css" rel="stylesheet">'
+        })
+
+        this.handlebars.registerHelper('scripts', function() {
+            return '<script src="http://cdn:3006/base.js"></script>'
+        })
     }
 
     *prepareTemplate(tpl) {
@@ -203,7 +211,7 @@ class View {
     }
 
     _wrapScriptTag(name, content) {
-        return `<script type="application/javascript">document.getElementById("async-${name}").innerHTML = ${JSON.stringify(content)};</script>`
+        return `<script type="application/javascript">injectBigpipeResult("async-${name}", ${JSON.stringify(content)});</script>`
     }
 
     _read() {}

@@ -1,0 +1,14 @@
+header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #888;
+}
+
+footer {
+    margin-top: 20px;
+    border-top: 1px solid #888;
+}
+
+header,
+footer {
+    width: 100%;
+}
