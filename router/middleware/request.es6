@@ -43,6 +43,10 @@ export default function () {
             stream.on('response', function (response) {
                 this.response.status = response.statusCode
                 this.response.set(extractHeadersToProxy(response.headers))
+
+                if (this.response.status !== 200) {
+                    this.response.body.end()
+                }
             }.bind(this))
 
             stream.on('data', function (data) {
@@ -52,8 +56,6 @@ export default function () {
             stream.on('end', function () {
                 this.response.body.end()
             }.bind(this))
-
-
         }
         else {
             proxyResult = yield post(this.state.resolver.mapping, this.request.headers, this.req)
