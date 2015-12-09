@@ -2,7 +2,7 @@
 
 import Logger from '../lib/logger'
 import initStatsMiddleware from '../lib/middleware/stats'
-import session from '../lib/middleware/session'
+import {session} from '../lib/middleware/session'
 
 const logger = Logger.instance()
 const program = require('commander')

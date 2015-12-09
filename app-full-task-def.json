@@ -267,6 +267,44 @@
       "logConfiguration": null,
       "cpu": 1024,
       "privileged": null
+    },
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 11211,
+          "containerPort": 11211,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": [
+        "/entrypoint.sh",
+        "memcached",
+        "-m",
+        "64"
+      ],
+      "mountPoints": [],
+      "name": "session",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [],
+      "links": null,
+      "workingDirectory": "/root",
+      "readonlyRootFilesystem": null,
+      "image": "memcached",
+      "command": [],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 1024,
+      "privileged": null
     }
   ],
   "volumes": [],
