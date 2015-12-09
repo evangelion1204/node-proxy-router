@@ -10,9 +10,6 @@ const logger = Logger.instance()
 
 import {request, requestStream, post} from '../../lib/request'
 
-const proxyPickHeaders = ['location', 'set-cookie', 'expires', 'cache-control']
-const persistHeaders = [SESSION_HEADER]
-
 class ResponseStream {
     constructor() {
         Readable.call(this)
@@ -28,7 +25,9 @@ class ResponseStream {
 util.inherits(ResponseStream, Readable)
 
 
-export default function () {
+export default function (rawConfig) {
+    let config = prepareConfig(rawConfig)
+
     return function *() {
         if (!this.state.resolver) {
             return
@@ -37,11 +36,9 @@ export default function () {
         let proxyResult
 
 
-        let persistedHeaders = _.transform(persistHeaders, function (result, header) {
-            result[persistHeaders] = this.cookies.get(header)
+        let persistedHeaders = _.transform(config.cookie, function (result, transform) {
+            result[transform.from] = this.cookies.get(transform.to)
         }.bind(this))
-
-        console.log(_.extend({}, this.request.header, persistedHeaders))
 
         if (this.request.method !== 'POST') {
             this.response.body = new ResponseStream()
@@ -73,29 +70,29 @@ export default function () {
             this.response.status = proxyResult.statusCode
             this.response.set(extractHeadersToProxy(proxyResult.headers))
 
-            let persistHeaders = extractHeadersToPersist(proxyResult.headers)
-
-            _.forEach(persistHeaders, function (value, header) {
-                this.cookies.set(header, value)
+            _.forEach(config.cookie, function (transform) {
+                this.cookies.set(transform.to, proxyResult.headers[transform.from])
             }.bind(this))
 
             return
         }
     }
+
+    function extractHeadersToProxy(headers) {
+        return extractHeaders(headers, config.proxy)
+    }
+
+    function extractHeaders(headers, selection) {
+        return _.extend(
+            {},
+            _.pick(headers, selection)
+            //_.pick(headers, function (value, key) {return key.startsWith('x-response')})
+        )
+    }
 }
 
-function extractHeadersToProxy(headers) {
-    return extractHeaders(headers, proxyPickHeaders)
-}
+function prepareConfig(config) {
+    let result = _.extend({}, config)
 
-function extractHeadersToPersist(headers) {
-    return extractHeaders(headers, persistHeaders)
-}
-
-function extractHeaders(headers, selection) {
-    return _.extend(
-        {},
-        _.pick(headers, selection)
-        //_.pick(headers, function (value, key) {return key.startsWith('x-response')})
-    )
+    return result
 }

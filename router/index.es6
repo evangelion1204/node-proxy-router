@@ -38,7 +38,7 @@ app.use(initStatsMiddleware('router'))
 app.use(initHealthCheckResolverMiddleware())
 app.use(initExactResolverMiddleware(routes))
 app.use(initStartsWithResolverMiddleware(routes))
-app.use(initRequestMiddleware())
+app.use(initRequestMiddleware(config.headers))
 
 app.listen(port)
 

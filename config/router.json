@@ -1,3 +1,11 @@
 {
-
+  "headers": {
+    "proxy": ["location", "set-cookie", "expires", "cache-control"],
+    "cookie": [
+      {
+        "from": "x-user-id",
+        "to": "session"
+      }
+    ]
+  }
 }

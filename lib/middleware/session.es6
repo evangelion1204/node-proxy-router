@@ -37,5 +37,7 @@ function read(key) {
 }
 
 function save(key, session) {
-    cache.set(key, session, 3600)
+    cache.set(key, session, 3600, function () {
+        console.log(arguments)
+    })
 }
