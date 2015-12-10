@@ -58,11 +58,19 @@ class StreamHbs {
         }.bind(this))
 
         this.handlebars.registerHelper('styles', function() {
-            return '<link type="text/css" href="http://cdn:3006/base.css" rel="stylesheet">'
+            let styles = ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', '//cdn:3006/base.css']
+
+            return _.reduce(styles, function (result, style) {
+                return result + `<link type="text/css" href="${style}" rel="stylesheet">`
+            }, '')
         })
 
         this.handlebars.registerHelper('scripts', function() {
-            return '<script src="http://cdn:3006/base.js"></script>'
+            let scripts = ['//code.jquery.com/jquery-2.1.4.min.js', '//cdn:3006/base.js']
+
+            return _.reduce(scripts, function (result, script) {
+                return result + `<script src="${script}"></script>`
+            }, '')
         })
     }
 

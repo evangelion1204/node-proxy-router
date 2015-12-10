@@ -35,7 +35,6 @@ app.use(initRenderMiddleware({
 }, config.endpoints))
 
 app.use(function *() {
-    console.log(this.request.query)
     this.view.mode = this.request.query.mode || renderMode
     this.view.template = this.request.path.replace(/$\//, '')
     this.view.values = {title: "login"}
