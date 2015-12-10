@@ -13,9 +13,9 @@
     "pretest": "babel . --extensions .es6 --out-dir .",
     "start-router": "node --harmony router/index.js --port 3001 --config ../config/router.json --routes ../config/routes.json",
     "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json --mode bigpipe",
-    "start-catalog": "node --harmony fragments/catalog.js --port 3005",
-    "start-general": "node --harmony fragments/all.js --port 3003",
-    "start-legacy": "node --harmony fragments/legacy.js --port 3004",
+    "start-catalog": "node --harmony fragments/catalog --port 3005",
+    "start-general": "node --harmony fragments/general --port 3003",
+    "start-legacy": "node --harmony fragments/login --port 3004",
     "start-cdn": "node --harmony cdn/index.js --port 3006",
     "test": "mocha --harmony --recursive test"
   },
