@@ -21,7 +21,10 @@ class StreamHbs {
 
         this.cache = {}
 
-        this.options = options
+        this.options = _.defaults(options, {
+            styles: ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', '//cdn:3006/base.css'],
+            scripts: ['//code.jquery.com/jquery-2.1.4.min.js', '//cdn:3006/base.js']
+        })
     }
 
     init() {
@@ -58,20 +61,16 @@ class StreamHbs {
         }.bind(this))
 
         this.handlebars.registerHelper('styles', function() {
-            let styles = ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', '//cdn:3006/base.css']
-
-            return _.reduce(styles, function (result, style) {
+            return _.reduce(this.options.styles, function (result, style) {
                 return result + `<link type="text/css" href="${style}" rel="stylesheet">`
             }, '')
-        })
+        }.bind(this))
 
         this.handlebars.registerHelper('scripts', function() {
-            let scripts = ['//code.jquery.com/jquery-2.1.4.min.js', '//cdn:3006/base.js']
-
-            return _.reduce(scripts, function (result, script) {
+            return _.reduce(this.options.scripts, function (result, script) {
                 return result + `<script src="${script}"></script>`
             }, '')
-        })
+        }.bind(this))
     }
 
     *prepareTemplate(tpl) {
