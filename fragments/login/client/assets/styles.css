@@ -1,0 +1,11 @@
+.log-login .btn-default {
+    background-color: #ffc520;
+    border-color: #ba8b1f;
+}
+
+.log-login .btn-default:hover,
+.log-login .btn-default:focus {
+    color: #eee;
+    background-color: #957115;
+    border-color: #4d3b0d;
+}
