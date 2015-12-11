@@ -2,7 +2,7 @@
 
 import Logger from '../lib/logger'
 import initStatsMiddleware from '../lib/middleware/stats'
-import initHealthCheckResolverMiddleware from '../lib/middleware/healthCheck'
+import initHealthCheckResolverMiddleware from '../lib/middleware/healthcheck'
 import initExactResolverMiddleware from './middleware/resolver/exact'
 import initStartsWithResolverMiddleware from './middleware/resolver/startsWith'
 import initRequestMiddleware from './middleware/request'
