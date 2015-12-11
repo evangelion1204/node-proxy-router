@@ -22,8 +22,8 @@ class StreamHbs {
         this.cache = {}
 
         this.options = _.defaults(options, {
-            styles: ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', '//cdn:3006/base.css'],
-            scripts: ['//code.jquery.com/jquery-2.1.4.min.js', '//cdn:3006/base.js']
+            styles: ['/base.css'],
+            scripts: ['/base.js']
         })
     }
 
