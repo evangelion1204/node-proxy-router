@@ -17,6 +17,9 @@
     "start-general": "node --harmony fragments/general --port 3003",
     "start-legacy": "node --harmony fragments/login --port 3004",
     "start-cdn": "node --harmony cdn/index.js --port 3006",
+    "prestart-pm2": "babel . --extensions .es6 --out-dir .",
+    "start-pm2": "pm2 start pm2.json",
+    "stop-pm2": "pm2 kill",
     "test": "mocha --harmony --recursive test"
   },
   "author": "",
