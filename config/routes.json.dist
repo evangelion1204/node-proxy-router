@@ -1,0 +1,37 @@
+{
+  "exact": [
+    {
+      "match": "/zalando-lounge",
+      "target": "http://www.zalando-lounge.de"
+    },
+    {
+      "match": "/zalando-lounge/contact",
+      "target": "https://www.zalando-lounge.de/contact"
+    },
+    {
+      "match": "/zl/aboutus",
+      "target": "http://www.zalando-lounge.de/aboutus"
+    },
+    {
+      "match": "/login",
+      "target": "http://layout:3002/login"
+    },
+    {
+      "match": "/login",
+      "method": "POST",
+      "target": "http://legacy:3004"
+    },
+    {
+      "match": "/catalog",
+      "target": "http://layout:3002/catalog"
+    }
+  ],
+  "startsWith": [
+    {
+      "match": "/zalando-lounge",
+      "target": "http://www.zalando-lounge.de",
+      "keepPath": true,
+      "trimMatch": true
+    }
+  ]
+}

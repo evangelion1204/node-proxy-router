@@ -29,10 +29,12 @@ const app = koa()
 console.log(__dirname)
 
 app.use(initStatsMiddleware('layout'))
-app.use(initRenderMiddleware({
-    viewPath: __dirname + '/views',
-    extname: '.handlebars'
-}, config.endpoints))
+app.use(initRenderMiddleware(
+    Object.assign({}, config.resources, {
+        viewPath: __dirname + '/views',
+        extname: '.handlebars'
+    }), config.endpoints)
+)
 
 app.use(function *() {
     this.view.mode = this.request.query.mode || renderMode

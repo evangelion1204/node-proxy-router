@@ -4,3 +4,5 @@ node_modules
 !cdn/assets/**/*.js
 router/*.js
 *.log
+config/*.json
+!config/*.json.dist

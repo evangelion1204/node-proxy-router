@@ -1,8 +1,0 @@
-{
-  "endpoints": {
-    "header": "http://general:3003/header",
-    "footer": "http://general:3003/footer",
-    "register": "http://legacy:3004",
-    "catalog": "http://catalog:3005/catalog"
-  }
-}
