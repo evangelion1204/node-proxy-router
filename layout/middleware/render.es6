@@ -56,20 +56,23 @@ class StreamHbs {
                 })
             })
 
-
-            return `<div id="async-${name}"></div>`
+            return new this.handlebars.SafeString(`<div id="async-${name}"></div>`)
         }.bind(this))
 
         this.handlebars.registerHelper('styles', function() {
-            return _.reduce(this.options.styles, function (result, style) {
-                return result + `<link type="text/css" href="${style}" rel="stylesheet">`
-            }, '')
+            return new this.handlebars.SafeString(
+                _.reduce(this.options.styles, function (result, style) {
+                    result + `<link type="text/css" href="${style}" rel="stylesheet">`
+                }, '')
+            )
         }.bind(this))
 
         this.handlebars.registerHelper('scripts', function() {
-            return _.reduce(this.options.scripts, function (result, script) {
-                return result + `<script src="${script}"></script>`
-            }, '')
+            return new this.handlebars.SafeString(
+                _.reduce(this.options.scripts, function (result, script) {
+                    return result + `<script src="${script}"></script>`
+                }, '')
+            )
         }.bind(this))
     }
 
