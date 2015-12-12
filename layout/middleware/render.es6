@@ -117,12 +117,33 @@ class StreamHbs {
 
         for (let name in asyncResponses) {
             let response = asyncResponses[name]
-            output = output.replace(`<div id="async-${name}"></div>`, response.body)
 
-            let responseHeader = _.find(response.headers, (headerValue, headerName) => headerName.startsWith('x-response'))
-            if (responseHeader !== undefined) {
-                koa.response.set(`x-response-time-${name}`, responseHeader)
+            let content
+
+            if (isContentTypeJson(response)) {
+                let parsedResponse = JSON.parse(response.body)
+
+                let additionalHeadTags = ''
+
+                if (parsedResponse.styles) {
+                    additionalHeadTags += _.reduce(parsedResponse.styles, function (result, style) {
+                        return result + `<link type="text/css" href="${style}" rel="stylesheet">`
+                    }, '')
+                }
+
+                if (parsedResponse.scripts) {
+                    additionalHeadTags += _.reduce(parsedResponse.scripts, function (result, script) {
+                        return result + `<script src="${script}"></script>`
+                    }, '')
+                }
+
+                content = parsedResponse.html
+                output = output.replace('</head>', `${additionalHeadTags}</head>`)
+            } else {
+                content = response.body
             }
+
+            output = output.replace(`<div id="async-${name}"></div>`, content)
         }
 
         return output
@@ -158,6 +179,9 @@ class StreamHbs {
     }
 }
 
+function isContentTypeJson(response) {
+    return response.headers['content-type'].search(/json/i) !== -1
+}
 class View {
     constructor (engine, koa) {
         this.koa = koa
@@ -206,7 +230,7 @@ class View {
                 let promise = asyncContent[name]
 
                 promise.then(function (response) {
-                    if (response.headers['content-type'].search(/json/i) !== -1) {
+                    if (isContentTypeJson(response)) {
                         this.push(this._wrapJsonInScriptTag(name, response.body.replace(/\n/g, '')))
                     } else {
                         this.push(this._wrapHtmlInScriptTag(name, response.body.replace(/\n/g, '')))
