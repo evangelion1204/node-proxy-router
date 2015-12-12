@@ -2,6 +2,7 @@
 
 import Logger from '../../lib/logger'
 import initStatsMiddleware from '../../lib/middleware/stats'
+import initFragmentJsonResponse from '../../lib/middleware/fragment-json-response'
 import {session} from '../../lib/middleware/session'
 
 const logger = Logger.instance()
@@ -21,9 +22,9 @@ const configPath = program.config
 
 if (configPath) {
     logger.log('Loading config file:', configPath)
-
-    const config = require(configPath)
 }
+
+const config = require(configPath)
 
 const app = koa()
 
@@ -34,6 +35,8 @@ app.use(hbs.middleware({
     viewPath: __dirname + '/views',
     extname: '.handlebars'
 }))
+
+app.use(initFragmentJsonResponse(config))
 
 app.use(function *() {
     if (!this.session.user) {

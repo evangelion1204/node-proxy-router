@@ -1,0 +1,22 @@
+.cat-catalog {
+    list-style: none;
+
+    padding: 0;
+
+    margin-left: -5%;
+    margin-top: -3%;
+}
+
+.cat-catalog-item {
+    display: block;
+
+    margin-left: 5%;
+    margin-top: 3%;
+
+    width: 20%;
+    float: left;
+
+    border: 2px dotted #ccc;
+
+    box-sizing: border-box;
+}

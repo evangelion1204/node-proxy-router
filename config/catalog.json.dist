@@ -1,0 +1,6 @@
+{
+  "resources": {
+    "styles": ["//cdn:3006/catalog/styles.css"],
+    "scripts": ["//cdn:3006/catalog/script.js"]
+  }
+}
