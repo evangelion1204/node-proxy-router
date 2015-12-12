@@ -6,3 +6,4 @@ router/*.js
 *.log
 config/*.json
 !config/*.json.dist
+!fragments/**/assets/**/*.js

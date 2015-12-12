@@ -58,6 +58,19 @@ app.use(function *() {
     }
 
     yield this.render('register')
+
+    this.body = JSON.stringify(
+        {
+            html: this.body,
+            scripts: [
+                '//cdn:3006/login/script.js'
+            ],
+            styles: [
+                '//cdn:3006/login/styles.css'
+            ]
+        }
+    )
+    this.response.type = 'application/json'
 })
 
 app.listen(port)

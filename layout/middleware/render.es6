@@ -36,7 +36,7 @@ class StreamHbs {
             logger.debug(`Fetching content for ${name} via ${this.contentEndpoints[name]}`)
             options.data.koa.state.async[name] = request(this.contentEndpoints[name], options.data.koa.request.headers)
 
-            return `<div id="async-${name}"></div>`
+            return new this.handlebars.SafeString(`<div id="async-${name}"></div>`)
         }.bind(this))
 
         this.handlebars.registerHelper('primary', function(name, options) {
@@ -62,7 +62,7 @@ class StreamHbs {
         this.handlebars.registerHelper('styles', function() {
             return new this.handlebars.SafeString(
                 _.reduce(this.options.styles, function (result, style) {
-                    result + `<link type="text/css" href="${style}" rel="stylesheet">`
+                    return result + `<link type="text/css" href="${style}" rel="stylesheet">`
                 }, '')
             )
         }.bind(this))
@@ -206,7 +206,11 @@ class View {
                 let promise = asyncContent[name]
 
                 promise.then(function (response) {
-                    this.push(this._wrapScriptTag(name, response.body.replace(/\n/g, '')))
+                    if (response.headers['content-type'].search(/json/i) !== -1) {
+                        this.push(this._wrapJsonInScriptTag(name, response.body.replace(/\n/g, '')))
+                    } else {
+                        this.push(this._wrapHtmlInScriptTag(name, response.body.replace(/\n/g, '')))
+                    }
                 }.bind(this))
             }
 
@@ -220,8 +224,12 @@ class View {
         this.push(null)
     }
 
-    _wrapScriptTag(name, content) {
+    _wrapHtmlInScriptTag(name, content) {
         return `<script type="application/javascript">injectBigpipeResult("async-${name}", ${JSON.stringify(content)});</script>`
+    }
+
+    _wrapJsonInScriptTag(name, json) {
+        return `<script type="application/javascript">injectBigpipeResult("async-${name}", ${json});</script>`
     }
 
     _read() {}
