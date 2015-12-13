@@ -70,7 +70,7 @@
       "script": "fragments/catalog",
       "args": [
         "--port",
-        "3005".
+        "3005",
         "--config",
         "../../config/catalog.json"
       ],
