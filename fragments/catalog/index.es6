@@ -38,10 +38,10 @@ app.use(initFragmentJsonResponse(Object.assign({}, config, {
 })))
 
 app.use(function *() {
-    //if (!this.session.user) {
-    //    this.redirect('/login')
-    //    return
-    //}
+    if (!this.session.user) {
+        this.redirect('/login')
+        return
+    }
 
     this.result.template = 'catalog'
     this.result.values = {

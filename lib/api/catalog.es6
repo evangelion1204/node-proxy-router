@@ -21,7 +21,7 @@ export default class Catalog {
                         {name: 'product9'},
                     ]
                 )
-            }, 1000)
+            }, Math.random() * 100 + 300)
         })
     }
 }
