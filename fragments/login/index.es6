@@ -4,6 +4,7 @@ import Logger from '../../lib/logger'
 import initStatsMiddleware from '../../lib/middleware/stats'
 import initFragmentJsonResponse from '../../lib/middleware/fragment-json-response'
 import {session} from '../../lib/middleware/session'
+import Auth from '../../lib/api/auth'
 
 const logger = Logger.instance()
 const program = require('commander')
@@ -31,18 +32,17 @@ const app = koa()
 app.use(body())
 session(app)
 app.use(initStatsMiddleware('legacy'))
-app.use(hbs.middleware({
+app.use(initFragmentJsonResponse(Object.assign({}, config, {
     viewPath: __dirname + '/views',
     extname: '.handlebars'
-}))
-
-app.use(initFragmentJsonResponse(config))
+})))
 
 app.use(function *() {
     if (this.request.method == 'POST') {
+        const auth = Auth.instance()
         logger.debug('Trying login with', this.request.body)
 
-        if (this.request.body.username === 'miiwersen' && this.request.body.password === '123456') {
+        if (yield auth.login(this.request.body.username, this.request.body.password)) {
             logger.debug('Login successful')
             this.session.user = {
                 username: this.request.body.username
@@ -60,7 +60,8 @@ app.use(function *() {
         }
     }
 
-    yield this.render('register')
+    this.result.template = 'register'
+    this.result.values = {}
 })
 
 app.listen(port)

@@ -207,7 +207,7 @@ class View {
 
             if (output === false) {
                 // close view
-                this.close()
+                this.end()
                 return
             }
 
@@ -219,7 +219,7 @@ class View {
                 let primaryResponse = yield this.primaryOnResponsePromise
 
                 if (this.engine.handlePrimaryResponse(primaryResponse, this.koa)) {
-                    this.close()
+                    this.end()
                     return
                 }
             }
@@ -241,10 +241,10 @@ class View {
             yield asyncContent
         }
 
-        this.close()
+        this.end()
     }
 
-    close() {
+    end() {
         this.push(null)
     }
 

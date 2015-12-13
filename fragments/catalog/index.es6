@@ -4,6 +4,7 @@ import Logger from '../../lib/logger'
 import initStatsMiddleware from '../../lib/middleware/stats'
 import initFragmentJsonResponse from '../../lib/middleware/fragment-json-response'
 import {session} from '../../lib/middleware/session'
+import Catalog from '../../lib/api/catalog'
 
 const logger = Logger.instance()
 const program = require('commander')
@@ -31,20 +32,21 @@ const app = koa()
 app.use(body())
 session(app)
 app.use(initStatsMiddleware('catalog'))
-app.use(hbs.middleware({
+app.use(initFragmentJsonResponse(Object.assign({}, config, {
     viewPath: __dirname + '/views',
     extname: '.handlebars'
-}))
-
-app.use(initFragmentJsonResponse(config))
+})))
 
 app.use(function *() {
-    if (!this.session.user) {
-        this.redirect('/login')
-        return
-    }
+    //if (!this.session.user) {
+    //    this.redirect('/login')
+    //    return
+    //}
 
-    yield this.render('catalog', {name: this.session.user.username})
+    this.result.template = 'catalog'
+    this.result.values = {
+        articles: Catalog.instance().articles()
+    }
 })
 
 app.listen(port)
