@@ -1,12 +1,8 @@
 <div class="container">
     <p>Hallo {{name}}</p>
     <ul class="cat-catalog">
-        <li class="cat-catalog-item">Product1</li>
-        <li class="cat-catalog-item">Product2</li>
-        <li class="cat-catalog-item">Product3</li>
-        <li class="cat-catalog-item">Product4</li>
-        <li class="cat-catalog-item">Product5</li>
-        <li class="cat-catalog-item">Product6</li>
-        <li class="cat-catalog-item">Product7</li>
+        {{#each articles}}
+        <li class="cat-catalog-item">{{name}}</li>
+        {{/each}}
     </ul>
 </div>

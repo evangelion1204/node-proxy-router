@@ -57,7 +57,9 @@
       "script": "fragments/login",
       "args": [
         "--port",
-        "3004"
+        "3004",
+        "--config",
+        "../../config/login.json"
       ],
       "watch": false,
       "node_args": "--harmony",
@@ -68,7 +70,9 @@
       "script": "fragments/catalog",
       "args": [
         "--port",
-        "3005"
+        "3005".
+        "--config",
+        "../../config/catalog.json"
       ],
       "watch": false,
       "node_args": "--harmony",
