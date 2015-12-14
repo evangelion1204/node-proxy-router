@@ -1,5 +1,9 @@
 {
-  "headers": {
+  "middleware": {
+    "paths": [],
+    "enabled": [
+      "cookie"
+    ],
     "proxy": ["location", "set-cookie", "expires", "cache-control"],
     "cookie": [
       {

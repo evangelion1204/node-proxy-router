@@ -35,24 +35,23 @@ export default function (rawConfig) {
 
         let proxyResult
 
-
-        let persistedHeaders = _.transform(config.cookie, function (result, transform) {
-            result[transform.from] = this.cookies.get(transform.to)
-        }.bind(this))
-
         if (this.request.method !== 'POST') {
             this.response.body = new ResponseStream()
             this.response.type = 'html'
 
-            let stream = requestStream(this.state.resolver.mapping, _.extend({}, this.request.header, persistedHeaders))
+            let stream = requestStream(this.state.resolver.mapping, this.request.header)
 
-            stream.on('response', function (response) {
-                this.response.status = response.statusCode
-                this.response.set(extractHeadersToProxy(response.headers))
+            const waitForResponse = new Promise(function (resolve) {
+                stream.on('response', function (response) {
+                    this.response.status = response.statusCode
+                    this.response.set(extractHeadersToProxy(response.headers))
 
-                if (this.response.status !== 200) {
-                    this.response.body.end()
-                }
+                    if (this.response.status !== 200) {
+                        this.response.body.end()
+                    }
+
+                    resolve(response)
+                }.bind(this))
             }.bind(this))
 
             stream.on('data', function (data) {
@@ -62,17 +61,15 @@ export default function (rawConfig) {
             stream.on('end', function () {
                 this.response.body.end()
             }.bind(this))
+
+            yield waitForResponse
         }
         else {
-            proxyResult = yield post(this.state.resolver.mapping, _.extend({}, this.request.header, persistedHeaders), this.req)
+            proxyResult = yield post(this.state.resolver.mapping, this.request.header, this.req)
 
             this.response.body = proxyResult.body
             this.response.status = proxyResult.statusCode
-            this.response.set(extractHeadersToProxy(proxyResult.headers))
-
-            _.forEach(config.cookie, function (transform) {
-                this.cookies.set(transform.to, proxyResult.headers[transform.from])
-            }.bind(this))
+            this.response.set(/*extractHeadersToProxy(proxyResult.headers)*/proxyResult.headers)
 
             return
         }
@@ -86,7 +83,6 @@ export default function (rawConfig) {
         return _.extend(
             {},
             _.pick(headers, selection)
-            //_.pick(headers, function (value, key) {return key.startsWith('x-response')})
         )
     }
 }
