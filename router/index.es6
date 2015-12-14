@@ -8,6 +8,7 @@ import initStartsWithResolverMiddleware from './middleware/resolver/startsWith'
 import initCookieMiddleware from './middleware/cookie'
 import initRequestMiddleware from './middleware/request'
 import initMetricsMiddleware from '../lib/middleware/metrics'
+import middlewareLoader from '../lib/middleware/loader'
 
 const logger = Logger.instance()
 const program = require('commander')
@@ -42,28 +43,7 @@ app.use(initStatsMiddleware('router'))
 app.use(initExactResolverMiddleware(routes))
 app.use(initStartsWithResolverMiddleware(routes))
 
-for (let name of config.middleware.enabled) {
-    let middleware = loadMiddleware(name)
-
-    app.use(middleware(config.middleware[name] ? config.middleware[name] : undefined))
-}
-
-function loadMiddleware(name) {
-    let paths = [name, `./middleware/${name}`]
-
-    for (let path of paths) {
-        try {
-            let middleware = require(path)
-
-            return typeof middleware === 'function' ? middleware : middleware.default
-        }
-        catch (error) {
-
-        }
-    }
-
-    throw new Error(`Middleware "${$name}" could not be found.`)
-}
+middlewareLoader(app, config.middleware)
 
 app.use(initCookieMiddleware(config.middleware.cookie))
 

@@ -18,25 +18,4 @@ describe('request middlware', function() {
         expect(middleware).to.be.defined
         expect(middleware().next).to.be.defined
     })
-
-    it('should resolve target', function (done) {
-        app.use(function *(next) {
-            this.state.resolver = {
-                mapping: 'http://google.de'
-            }
-
-            yield next
-        })
-
-        app.use(middleware())
-
-        app.use(function *() {
-            this.response.body = 'ok'
-        })
-
-        request(app.listen())
-            .get('/')
-            .expect(200, done)
-
-    })
 })

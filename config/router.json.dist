@@ -1,6 +1,6 @@
 {
   "middleware": {
-    "paths": [],
+    "paths": ["../../router/middleware"],
     "enabled": [
       "cookie"
     ],

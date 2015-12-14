@@ -44,6 +44,8 @@
     "memcached": "^2.2.1",
     "mocha": "^2.3.4",
     "request": "^2.67.0",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0",
     "supertest": "^1.1.0",
     "uuid": "^2.0.1"
   }
