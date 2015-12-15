@@ -5,7 +5,7 @@ const request = require('supertest')
 const chai = require('chai')
 const expect = chai.expect
 
-import middleware from '../../../router/middleware/request'
+import middleware from '../../../koa-router/middleware/request'
 
 describe('request middlware', function() {
     let app

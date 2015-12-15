@@ -4,6 +4,7 @@
   "description": "Containing a router and more",
   "main": "router/index.js",
   "scripts": {
+    "prestart-plain": "babel . --extensions .es6 --out-dir .",
     "prestart-router": "babel . --extensions .es6 --out-dir .",
     "prestart-layout": "babel . --extensions .es6 --out-dir .",
     "prestart-catalog": "babel . --extensions .es6 --out-dir .",
@@ -11,7 +12,8 @@
     "prestart-legacy": "babel . --extensions .es6 --out-dir .",
     "prestart-cdn": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
-    "start-router": "node --harmony router/koa.js --port 3001 --config ../config/router.json --routes ../config/routes.json",
+    "start-plain": "node --harmony router/index.js --port 3000 --config ../config/router.json --routes ../config/routes.json",
+    "start-router": "node --harmony koa-router/index.js --port 3001 --config ../config/router.json --routes ../config/routes.json",
     "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json --mode bigpipe",
     "start-catalog": "node --harmony fragments/catalog --port 3005  --config ../../config/catalog.json",
     "start-general": "node --harmony fragments/general --port 3003",

@@ -5,9 +5,9 @@ const request = require('supertest')
 const chai = require('chai')
 const expect = chai.expect
 
-import middleware from '../../../../router/middleware/resolver/exact'
+import middleware from '../../../../koa-router/middleware/resolver/startsWith'
 
-describe('Exact resolver middlware', function() {
+describe('StartsWith resolver middlware', function() {
     let app
 
     beforeEach(function () {
@@ -21,8 +21,8 @@ describe('Exact resolver middlware', function() {
 
     it('should resolve target', function (done) {
         app.use(middleware({
-            exact: {
-                '/': 'http://www.google.com/doodles'
+            startsWith: {
+                '/start': 'http://www.google.com/doodles'
             }
         }))
         app.use(function *() {
@@ -33,7 +33,7 @@ describe('Exact resolver middlware', function() {
         })
 
         request(app.listen())
-            .get('/')
+            .get('/start/end')
             .expect(200, done)
 
     })
