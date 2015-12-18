@@ -6,7 +6,7 @@ import https from 'https'
 
 const logger = Logger.instance()
 
-var agent = new http.Agent({keepAlive: true})
+const agent = new http.Agent({keepAlive: true})
 
 
 export default class Router {
