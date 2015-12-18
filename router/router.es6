@@ -23,10 +23,8 @@ export default class Router {
         this._server = http.createServer(function (request, response) {
             try {
                 let route = this.resolver.match(request)
-
                 let parsedEndpoint = url.parse(route.endpoint)
-
-                let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {agent: agent, headers: Object.assign({}, request.headers, {host: parsedEndpoint.hostname})}))
+                let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: request.method , agent: agent, headers: Object.assign({}, request.headers)}))
                 proxyRequest.on('error', function (error) {
                     console.log(error)
                     response.end(error)
