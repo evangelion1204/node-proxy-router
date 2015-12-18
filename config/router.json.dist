@@ -1,6 +1,6 @@
 {
   "middleware": {
-    "paths": ["../../router/middleware"],
+    "paths": ["../../koa-router/middleware"],
     "enabled": [
       "cookie"
     ],
