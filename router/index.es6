@@ -25,11 +25,12 @@ if (routesPath) {
     logger.log('Loading routes file:', routesPath)
 }
 
-const config = require(configPath)
+//const config = require(configPath)
 const routes = require(routesPath)
-const http = require('http')
 
-const app = new Router()
+const app = new Router({
+    routes: routes
+})
 
 app.listen(port)
 

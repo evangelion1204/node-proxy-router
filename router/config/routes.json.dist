@@ -1,0 +1,30 @@
+{
+  "login": {
+    "matcher": {
+      "path": {
+        "match": "/login",
+        "type": "STRICT"
+      }
+    },
+    "endpoint": "http://layout:3002/login"
+  },
+  "loginPost": {
+    "matcher": {
+      "path": {
+        "match": "/login",
+        "type": "STRICT"
+      },
+      "method": "POST"
+    },
+    "endpoint": "http://legacy:3004"
+  },
+  "catalog": {
+    "matcher": {
+      "path": {
+        "match": "/catalog",
+        "type": "STRICT"
+      }
+    },
+    "endpoint": "http://layout:3002/catalog"
+  }
+}

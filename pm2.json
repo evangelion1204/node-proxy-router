@@ -2,14 +2,14 @@
   "apps": [
     {
       "name": "router",
-      "script": "koa-router/index.js",
+      "script": "router/index.js",
       "args": [
         "--port",
         "3001",
         "--config",
         "../config/router.json",
         "--routes",
-        "../config/routes.json"
+        "./config/routes.json"
       ],
       "watch": false,
       "node_args": "--harmony",

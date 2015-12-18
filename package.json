@@ -12,7 +12,8 @@
     "prestart-legacy": "babel . --extensions .es6 --out-dir .",
     "prestart-cdn": "babel . --extensions .es6 --out-dir .",
     "pretest": "babel . --extensions .es6 --out-dir .",
-    "start-plain": "node --harmony router/index.js --port 3000 --config ../config/router.json --routes ../config/routes.json",
+    "compile": "babel . --extensions .es6 --out-dir .",
+    "start-plain": "node --harmony router/index.js --port 3000 --config ../config/router.json --routes ./config/routes.json",
     "start-router": "node --harmony koa-router/index.js --port 3001 --config ../config/router.json --routes ../config/routes.json",
     "start-layout": "node --harmony layout/index.js --port 3002 --config ../config/layout.json --mode bigpipe",
     "start-catalog": "node --harmony fragments/catalog --port 3005  --config ../../config/catalog.json",
@@ -22,7 +23,7 @@
     "prestart-pm2": "babel . --extensions .es6 --out-dir .",
     "start-pm2": "pm2 start pm2.json",
     "stop-pm2": "pm2 kill",
-    "test": "mocha --harmony --recursive test"
+    "test": "mocha --harmony --recursive test/router"
   },
   "author": "",
   "license": "MIT",
