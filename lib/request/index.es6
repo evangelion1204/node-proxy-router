@@ -5,6 +5,7 @@ import Logger from '../../lib/logger'
 const url = require('url')
 const nodeRequest = require('request')
 const _ = require('lodash')
+const http = require('http')
 
 const logger = Logger.instance()
 
