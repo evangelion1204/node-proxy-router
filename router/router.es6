@@ -6,16 +6,18 @@ import https from 'https'
 
 const logger = Logger.instance()
 
+var agent = new http.Agent({keepAlive: true})
+
 
 export default class Router {
     constructor (options = {}) {
         this.options = options
+        http.globalAgent.keepAlive = true
     }
 
     listen(port) {
         this._server = http.createServer(function (request, response) {
-            let proxyRequest = http.request(Object.assign({}, {agent: false, hostname: 'www.golem.de', port: 80, path: '/', headers: Object.assign({}, request.headers, {host: 'www.golem.de'})}))
-
+            let proxyRequest = http.request(Object.assign({}, {agent: agent, hostname: 'fun.mmig.de', path: '/', headers: Object.assign({}, request.headers, {host: 'fun.mmig.de'})}))
             proxyRequest.on('error', function (error) {
                 console.log(error)
                 response.end(error)
@@ -29,7 +31,7 @@ export default class Router {
                 response.writeHead(proxyResponse.statusCode)
 
                 proxyResponse.on('end', function () {
-                    //console.log('END')
+                    response.end()
                 })
 
                 proxyResponse.pipe(response)
