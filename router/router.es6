@@ -8,6 +8,10 @@ import Builder from './resolver/builder/default'
 
 const logger = Logger.instance()
 const url = require('url')
+const cookies = require('cookies')
+const compose = require('koa-compose')
+const co = require('co')
+
 const agent = new http.Agent({keepAlive: true})
 
 
@@ -20,38 +24,67 @@ export default class Router {
     }
 
     listen(port) {
-        this._server = http.createServer(function (request, response) {
-            try {
-                let route = this.resolver.match(request)
-                let parsedEndpoint = url.parse(route.endpoint)
-                let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: request.method , agent: agent, headers: Object.assign({}, request.headers)}))
-                proxyRequest.on('error', function (error) {
-                    console.log(error)
-                    response.end(error)
-                })
+        this._server = http.createServer(this.onRequest.bind(this))
 
-                proxyRequest.on('response', function (proxyResponse) {
-                    Object.keys(proxyResponse.headers).forEach(function(header) {
-                        response.setHeader(header, proxyResponse.headers[header])
-                    })
+        return this._server.listen(port)
+    }
 
-                    response.writeHead(proxyResponse.statusCode)
+    onRequest(request, response) {
+        try {
+            let route = this.resolver.match(request)
+            let context = this.createContext(request, response, route)
 
-                    proxyResponse.on('end', function () {
-                        response.end()
-                    })
-
-                    proxyResponse.pipe(response)
-                })
-
-                request.pipe(proxyRequest)
-            } catch (error) {
-                response.writeHead(404)
-                response.end('error')
+            if (!route.composedFilters) {
+                route.composedFilters = compose([this.getProxyMiddleware()])
             }
 
-        }.bind(this))
+            co.wrap(route.composedFilters).call(context).then(function () {
 
-        this._server.listen(port)
+            }).catch(function () {
+                response.writeHead(500)
+                response.end()
+            })
+        } catch (error) {
+            response.writeHead(404)
+            response.end()
+        }
+
+    }
+
+    createContext(request, response, route) {
+        return {
+            request: request,
+            response: response,
+            route: route,
+            cookies: cookies(request, response)
+        }
+    }
+
+    getProxyMiddleware() {
+        return function *(next) {
+            let parsedEndpoint = url.parse(this.route.endpoint)
+            let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: agent, headers: Object.assign({}, this.request.headers)}))
+
+            proxyRequest.on('error', function (error) {
+                this.response.writeHead(500)
+                this.response.end()
+            }.bind(this))
+
+            proxyRequest.on('response', function (proxyResponse) {
+                Object.keys(proxyResponse.headers).forEach(function(header) {
+                    this.response.setHeader(header, proxyResponse.headers[header])
+                }.bind(this))
+
+                this.response.writeHead(proxyResponse.statusCode)
+
+                proxyResponse.on('end', function () {
+                    this.response.end()
+                }.bind(this))
+
+                proxyResponse.pipe(this.response)
+            }.bind(this))
+
+            this.request.pipe(proxyRequest)
+        }
     }
 }

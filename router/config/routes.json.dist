@@ -6,6 +6,9 @@
         "type": "STRICT"
       }
     },
+    "filters": [
+
+    ],
     "endpoint": "http://layout:3002/login"
   },
   "loginPost": {
@@ -16,6 +19,9 @@
       },
       "method": "POST"
     },
+    "filters": [
+
+    ],
     "endpoint": "http://legacy:3004"
   },
   "catalog": {
@@ -25,6 +31,9 @@
         "type": "STRICT"
       }
     },
+    "filters": [
+
+    ],
     "endpoint": "http://layout:3002/catalog"
   }
 }
