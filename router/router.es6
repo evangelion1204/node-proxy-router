@@ -35,7 +35,7 @@ export default class Router {
             let context = this.createContext(request, response, route)
 
             if (!route.composedFilters) {
-                route.composedFilters = compose([this.getProxyMiddleware()])
+                route.composedFilters = compose([this.streamProxyMiddleware, this.requestProxyMiddleware])
             }
 
             co.wrap(route.composedFilters).call(context).then(function () {
@@ -60,31 +60,31 @@ export default class Router {
         }
     }
 
-    getProxyMiddleware() {
-        return function *(next) {
-            let parsedEndpoint = url.parse(this.route.endpoint)
-            let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: agent, headers: Object.assign({}, this.request.headers)}))
+    *requestProxyMiddleware() {
+        let parsedEndpoint = url.parse(this.route.endpoint)
+        let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: agent, headers: Object.assign({}, this.request.headers)}))
 
-            proxyRequest.on('error', function (error) {
-                this.response.writeHead(500)
-                this.response.end()
-            }.bind(this))
+        proxyRequest.on('error', function (error) {
+            this.response.writeHead(500)
+            this.response.end()
+        }.bind(this))
 
-            proxyRequest.on('response', function (proxyResponse) {
-                Object.keys(proxyResponse.headers).forEach(function(header) {
-                    this.response.setHeader(header, proxyResponse.headers[header])
-                }.bind(this))
+        this.request.pipe(proxyRequest)
 
-                this.response.writeHead(proxyResponse.statusCode)
+        this.proxyResponse = yield new Promise(function (resolve) {
+            proxyRequest.on('response', resolve)
+        })
+    }
 
-                proxyResponse.on('end', function () {
-                    this.response.end()
-                }.bind(this))
+    *streamProxyMiddleware(next) {
+        yield next
 
-                proxyResponse.pipe(this.response)
-            }.bind(this))
+        Object.keys(this.proxyResponse.headers).forEach(function(header) {
+            this.response.setHeader(header, this.proxyResponse.headers[header])
+        }.bind(this))
 
-            this.request.pipe(proxyRequest)
-        }
+        this.response.writeHead(this.proxyResponse.statusCode)
+
+        this.proxyResponse.pipe(this.response)
     }
 }
