@@ -9,21 +9,18 @@ const compose = require('koa-compose')
 const co = require('co')
 const cookies = require('cookies')
 
-import Filter from '../../../router/filter/cookie'
+import Filter from '../../../router/filter/responseHeader'
 
 chai.use(sinonChai)
 
 
-describe('Cookie filter', function() {
+describe('RequestHeader filter', function() {
     function buildContext() {
         let ctx = {
-            request: {headers: {cookie: "cookieName=value"}, connection: {encrypted: false}},
-            response: {headers: {headerName: 'newValue'}}
+            request: {headers: {}},
+            proxyResponse: {headers: {}},
+            response: {headers: {}}
         }
-
-        ctx.response.getHeader = (name) => ctx.response.headers[name]
-        ctx.response.setHeader = (name, value) => {ctx.response.headers[name] = value}
-        ctx.cookies = cookies(ctx.request, ctx.response)
 
         return ctx
     }
@@ -33,16 +30,15 @@ describe('Cookie filter', function() {
     })
 
     it('should return a middleware', function () {
-        expect(Filter('cookie', 'header')).to.be.defined
+        expect(Filter('header', 'value')).to.be.defined
     })
 
-    it('should modify the header', function (done) {
+    it('should modify the response header', function (done) {
         let ctx = buildContext()
         let middleware = [function *(next) {
             yield next
-            expect(this.request.headers['headerName']).to.be.not.undefined
-            expect(this.response.headers['headerName']).to.be.undefined
-        }, Filter('cookieName', 'headerName')]
+            expect(this.proxyResponse.headers['header']).to.be.equal('value')
+        }, Filter('header', 'value')]
 
         let composedMiddleware = compose(middleware)
 

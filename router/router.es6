@@ -5,6 +5,7 @@ import http from 'http'
 import https from 'https'
 import Resolver from './resolver'
 import Builder from './resolver/builder/default'
+import FilterBuilder from './filter/builder'
 
 const logger = Logger.instance()
 const url = require('url')
@@ -20,6 +21,7 @@ export default class Router {
         this.options = options
 
         this.resolver = new Resolver(new Builder())
+        this.filterBuilder = new FilterBuilder(options)
         this.resolver.init(this.options.routes)
     }
 
@@ -35,7 +37,8 @@ export default class Router {
             let context = this.createContext(request, response, route)
 
             if (!route.composedFilters) {
-                route.composedFilters = compose([this.streamProxyMiddleware, this.requestProxyMiddleware])
+                let filters = this.filterBuilder.buildFilters(route.filters)
+                route.composedFilters = compose([this.streamProxyMiddleware, ...filters ,this.requestProxyMiddleware])
             }
 
             co.wrap(route.composedFilters).call(context).then(function () {

@@ -67,4 +67,21 @@ describe('Router', function() {
                 done.apply(this, arguments)
             })
     })
+
+    it('the filter should add a header to the request', function (done) {
+        let server = http.createServer(function (request, response) {
+            expect(request.headers['header']).to.be.equal('value')
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+        let app = new Router({routes: configs.routerBaseWithFilterDefinition})
+
+        request(app.listen())
+            .get('/')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
 })

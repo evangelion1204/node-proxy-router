@@ -63,8 +63,8 @@ export const routerBaseWithFilterDefinition = {
         },
         filters: [
             {
-                name: 'cookie',
-                args: ['cookieName', 'headerName']
+                name: 'requestHeader',
+                args: ['header', 'value']
             }
         ],
         endpoint: 'http://localhost:' + routerPort
