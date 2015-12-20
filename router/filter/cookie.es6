@@ -11,10 +11,10 @@ export default function (cookieName, headerName) {
 
         yield next
 
-        if (this.response.headers[headerName]) {
-            this.cookies.set(cookieName, this.response.headers[headerName])
+        if (this.proxyResponse.headers[headerName]) {
+            this.cookies.set(cookieName, this.proxyResponse.headers[headerName])
 
-            delete this.response.headers[headerName]
+            delete this.proxyResponse.headers[headerName]
         }
     }
 }

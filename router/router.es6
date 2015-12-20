@@ -32,22 +32,30 @@ export default class Router {
     }
 
     onRequest(request, response) {
+        logger.debug(`Receiving request "${request.url}"`)
+
         try {
             let route = this.resolver.match(request)
             let context = this.createContext(request, response, route)
 
+            logger.debug(`Resolved route ${JSON.stringify(route)}`)
+
             if (!route.composedFilters) {
+                logger.debug(`Composing filters`)
+
                 let filters = this.filterBuilder.buildFilters(route.filters)
                 route.composedFilters = compose([this.streamProxyMiddleware, ...filters ,this.requestProxyMiddleware])
             }
 
-            co.wrap(route.composedFilters).call(context).then(function () {
+            logger.debug(`Passing execution to composed filters`)
 
-            }).catch(function () {
+            co.wrap(route.composedFilters).call(context).catch(function (error) {
+                logger.debug(`Error handling request "${error}"`)
                 response.writeHead(500)
                 response.end()
             })
         } catch (error) {
+            logger.debug(`Error serving request ${error}`)
             response.writeHead(404)
             response.end()
         }

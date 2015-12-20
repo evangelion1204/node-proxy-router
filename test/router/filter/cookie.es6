@@ -18,6 +18,7 @@ describe('Cookie filter', function() {
     function buildContext() {
         let ctx = {
             request: {headers: {cookie: "cookieName=value"}, connection: {encrypted: false}},
+            proxyResponse: {headers: {}},
             response: {headers: {headerName: 'newValue'}}
         }
 
@@ -41,7 +42,7 @@ describe('Cookie filter', function() {
         let middleware = [function *(next) {
             yield next
             expect(this.request.headers['headerName']).to.be.not.undefined
-            expect(this.response.headers['headerName']).to.be.undefined
+            expect(this.proxyResponse.headers['headerName']).to.be.undefined
         }, Filter('cookieName', 'headerName')]
 
         let composedMiddleware = compose(middleware)

@@ -12,6 +12,8 @@ export default class FilterBuilder {
     }
 
     buildFilters(filters) {
+        logger.debug(`Building filters ${JSON.stringify(filters)}`)
+
         return _.map(filters, function (filter) {
             let filterInitializer = this.loadFilter(filter.name)
 
@@ -20,6 +22,7 @@ export default class FilterBuilder {
     }
 
     loadFilter(name) {
+        logger.debug(`Loading filter ${name}`)
         let includePaths = ['.'].concat(this.paths || [])
 
         includePaths = _.map(includePaths, function (includePath) {
