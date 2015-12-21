@@ -7,44 +7,11 @@ const sinonChai = require('sinon-chai')
 const expect = chai.expect
 
 import DefaultBuilder from '../../../../router/resolver/builder/default'
+import * as exampleConfig from './configs'
 
 chai.use(sinonChai)
 
 describe('DefaultBuilder', function() {
-    let routesDefinition = {
-        strict: {
-            matcher: {
-                path: {
-                    match: '/test',
-                    type: 'STRICT'
-                }
-            },
-            endpoint: 'http://domain.tld'
-        },
-        regexp: {
-            matcher: {
-                path: {
-                    match: '/catalog-*',
-                    type: 'REGEX'
-                }
-            },
-            endpoint: 'http://domain.tld'
-        }
-    }
-
-    let routesWithPostDefinition = Object.assign({}, routesDefinition, {
-        strictPost: {
-            matcher: {
-                path: {
-                    match: '/test',
-                    type: 'STRICT'
-                },
-                method: 'POST'
-            },
-            endpoint: 'http://domain.tld/new'
-        }
-    })
-
     it('Default Builder should be available', function () {
         expect(DefaultBuilder).to.be.a('function')
     })
@@ -60,7 +27,7 @@ describe('DefaultBuilder', function() {
 
         let routes = {GET: {}}
 
-        instance.update(routes, routesDefinition)
+        instance.update(routes, exampleConfig.routesDefinition)
 
         expect(routes.GET['/test'].endpoint).to.be.equal('http://domain.tld')
     })
@@ -70,9 +37,20 @@ describe('DefaultBuilder', function() {
 
         let routes = {GET: {}, POST: {}}
 
-        instance.update(routes, routesWithPostDefinition)
+        instance.update(routes, exampleConfig.routesWithPostDefinition)
 
         expect(routes.GET['/test'].endpoint).to.be.equal('http://domain.tld')
         expect(routes.POST['/test'].endpoint).to.be.equal('http://domain.tld/new')
+    })
+
+    it('Update the routes structure for strict header matching', function () {
+        let instance = new DefaultBuilder()
+
+        let routes = {GET: {}, POST: {}}
+
+        instance.update(routes, exampleConfig.strictHeaderAjaxDefinition)
+
+        expect(routes.GET.ANY.HEADERS[0].endpoint).to.be.equal('http://domain.tld/ajax')
+        expect(routes.POST.ANY.HEADERS[0].endpoint).to.be.equal('http://domain.tld/ajax')
     })
 })

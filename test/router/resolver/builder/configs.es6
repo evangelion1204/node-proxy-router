@@ -39,6 +39,19 @@ export const routesWithPostDefinition = Object.assign({}, routesDefinition, {
     }
 })
 
+export const strictHeaderAjaxDefinition = {
+    strict: {
+        matcher: {
+            headers: [{
+                name: 'HTTP_X_REQUESTED_WITH',
+                valie: 'xmlhttprequest',
+                type: 'STRICT'
+            }]
+        },
+        endpoint: 'http://domain.tld/ajax'
+    }
+}
+
 export const routerPort = 4444
 
 export const routerBaseDefinition = {

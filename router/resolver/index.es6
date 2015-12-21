@@ -29,18 +29,46 @@ export default class Resolver {
 
     match(request) {
         let result
-        if (result = this.matchPath(request)) {
+        if (result = this.matchMethod(this.routes, request)) {
             return result
         }
 
         throw new Error(`No matching route found for ${request}`)
     }
 
-    matchPath(request) {
-        if (this.routes[request.method][request.url]) {
-            return this.routes[request.method][request.url]
+    matchMethod(tree, request) {
+        let result = tree[request.method]
+
+        if (!result) {
+            return false
         }
 
+        return this.matchPath(result, request)
+    }
+
+    matchPath(tree, request) {
+        let result = tree[request.url] || tree.ANY
+
+        if (!result) {
+            return false
+        }
+
+        return this.matchHeaders(result, request)
+    }
+
+    matchHeaders(tree, request) {
+        if (!tree.HEADERS) {
+            return tree
+        }
+
+        for (let headerMatchRoute of tree.HEADERS) {
+            _.every(headerMatchRoute.match.headers, {header} => request.headers[header.name] === header.value)
+            for (header of ) {
+                if (!request.headers[header.name] !== header.value) {
+                    break
+                }
+            }
+        }
     }
 }
 

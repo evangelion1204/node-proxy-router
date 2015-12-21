@@ -9,40 +9,11 @@ const expect = chai.expect
 import Resolver from '../../../router/resolver'
 import Builder from '../../../router/resolver/builder/default'
 
+import * as exampleConfig from './builder/configs'
+
 chai.use(sinonChai)
 
 describe('Resolver', function() {
-    let routesDefinition = {
-        strict: {
-            matcher: {
-                path: {
-                    match: '/test',
-                    type: 'STRICT'
-                }
-            },
-            endpoint: 'http://domain.tld'
-        },
-        strictPost: {
-            matcher: {
-                path: {
-                    match: '/test',
-                    type: 'STRICT'
-                },
-                method: 'POST'
-            },
-            endpoint: 'http://domain.tld/new'
-        },
-        regexp: {
-            matcher: {
-                path: {
-                    match: '/catalog-*',
-                    type: 'REGEX'
-                }
-            },
-            endpoint: 'http://domain.tld'
-        }
-    }
-
     let mockedBuilder
 
     beforeEach(function () {
@@ -74,7 +45,7 @@ describe('Resolver', function() {
     it('Resolver should resolve STRICT path route', function () {
         let resolver = new Resolver(new Builder())
 
-        resolver.init(routesDefinition)
+        resolver.init(exampleConfig.routesWithPostDefinition)
 
         expect(resolver.match({url: '/test', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
     })
@@ -82,8 +53,16 @@ describe('Resolver', function() {
     it('Resolver should resolve STRICT path route with POST', function () {
         let resolver = new Resolver(new Builder())
 
-        resolver.init(routesDefinition)
+        resolver.init(exampleConfig.routesWithPostDefinition)
 
         expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
+    })
+
+    it('Resolver should resolve STRICT header route', function () {
+        let resolver = new Resolver(new Builder())
+
+        resolver.init(exampleConfig.strictHeaderAjaxDefinition)
+
+        expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
     })
 })
