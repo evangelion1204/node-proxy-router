@@ -62,13 +62,12 @@ export default class Resolver {
         }
 
         for (let headerMatchRoute of tree.HEADERS) {
-            _.every(headerMatchRoute.match.headers, {header} => request.headers[header.name] === header.value)
-            for (header of ) {
-                if (!request.headers[header.name] !== header.value) {
-                    break
-                }
+            if (_.every(headerMatchRoute.matcher.headers, header => request.headers[header.name] === header.value)) {
+                return headerMatchRoute
             }
         }
+
+        return false
     }
 }
 

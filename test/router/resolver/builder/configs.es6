@@ -44,7 +44,7 @@ export const strictHeaderAjaxDefinition = {
         matcher: {
             headers: [{
                 name: 'HTTP_X_REQUESTED_WITH',
-                valie: 'xmlhttprequest',
+                value: 'xmlhttprequest',
                 type: 'STRICT'
             }]
         },
