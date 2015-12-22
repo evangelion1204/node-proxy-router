@@ -25,32 +25,43 @@ describe('DefaultBuilder', function() {
     it('Update the routes structure', function () {
         let instance = new DefaultBuilder()
 
-        let routes = {GET: {}}
+        let routes = {}
 
         instance.update(routes, exampleConfig.routesDefinition)
 
-        expect(routes.GET['/test'].endpoint).to.be.equal('http://domain.tld')
+        expect(routes['/test'][0].route.endpoint).to.be.equal('http://domain.tld')
     })
 
-    it('Update the routes structure including POST', function () {
+    it('Update the routes structure including POST, sorted by complexity', function () {
         let instance = new DefaultBuilder()
 
-        let routes = {GET: {}, POST: {}}
+        let routes = {}
 
         instance.update(routes, exampleConfig.routesWithPostDefinition)
 
-        expect(routes.GET['/test'].endpoint).to.be.equal('http://domain.tld')
-        expect(routes.POST['/test'].endpoint).to.be.equal('http://domain.tld/new')
+        expect(routes['/test'][0].route.endpoint).to.be.equal('http://domain.tld/new')
+        expect(routes['/test'][1].route.endpoint).to.be.equal('http://domain.tld')
     })
 
     it('Update the routes structure for strict header matching', function () {
         let instance = new DefaultBuilder()
 
-        let routes = {GET: {}, POST: {}}
+        let routes = {}
 
         instance.update(routes, exampleConfig.strictHeaderAjaxDefinition)
 
-        expect(routes.GET.ANY.HEADERS[0].endpoint).to.be.equal('http://domain.tld/ajax')
-        expect(routes.POST.ANY.HEADERS[0].endpoint).to.be.equal('http://domain.tld/ajax')
+        expect(routes.ANY[0].route.endpoint).to.be.equal('http://domain.tld/ajax')
+        expect(routes.ANY[0].route.endpoint).to.be.equal('http://domain.tld/ajax')
+    })
+
+    it('Update the routes structure for strict header and path matching', function () {
+        let instance = new DefaultBuilder()
+
+        let routes = {}
+
+        instance.update(routes, exampleConfig.strictPathAndHeaderAjaxDefinition)
+
+        expect(routes['/path/header'][0].route.endpoint).to.be.equal('http://domain.tld/ajax')
+        expect(routes['/path/header'][0].route.endpoint).to.be.equal('http://domain.tld/ajax')
     })
 })

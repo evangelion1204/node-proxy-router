@@ -10,6 +10,6 @@ export default class Logger {
     }
 
     debug() {
-        console.log.apply(console, arguments)
+        //console.log.apply(console, arguments)
     }
 }

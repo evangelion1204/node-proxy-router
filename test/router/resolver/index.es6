@@ -36,7 +36,7 @@ describe('Resolver', function() {
         expect(resolver.init({test: {}})).to.be.equal(resolver)
 
         expect(mockedBuilder.update).to.be.calledWith(
-            {GET: {}, POST: {}},
+            {},
             {test: {}}
         )
         expect(mockedBuilder.update).to.be.calledOnce

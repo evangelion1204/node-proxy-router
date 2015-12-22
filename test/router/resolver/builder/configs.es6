@@ -52,6 +52,23 @@ export const strictHeaderAjaxDefinition = {
     }
 }
 
+export const strictPathAndHeaderAjaxDefinition = {
+    strict: {
+        matcher: {
+            path: {
+                match: '/path/header',
+                type: 'STRICT'
+            },
+            headers: [{
+                name: 'HTTP_X_REQUESTED_WITH',
+                value: 'xmlhttprequest',
+                type: 'STRICT'
+            }]
+        },
+        endpoint: 'http://domain.tld/ajax'
+    }
+}
+
 export const routerPort = 4444
 
 export const routerBaseDefinition = {
