@@ -35,7 +35,9 @@ export default class Router {
         logger.debug(`Receiving request "${request.url}"`)
 
         try {
+            console.time('resolving')
             let route = this.resolver.match(request)
+            console.timeEnd('resolving')
             let context = this.createContext(request, response, route)
 
             logger.debug(`Resolved route ${JSON.stringify(route)}`)
@@ -49,11 +51,17 @@ export default class Router {
 
             logger.debug(`Passing execution to composed filters`)
 
-            co.wrap(route.composedFilters).call(context).catch(function (error) {
-                logger.debug(`Error handling request "${error}"`)
-                response.writeHead(500)
-                response.end()
-            })
+            console.time('middlware')
+            co.wrap(route.composedFilters).call(context)
+                .then(function () {
+                    console.timeEnd('middlware')
+                })
+                .catch(function (error) {
+                    console.timeEnd('middlware')
+                    logger.debug(`Error handling request "${error}"`)
+                    response.writeHead(500)
+                    response.end()
+                })
         } catch (error) {
             logger.debug(`Error serving request ${error}`)
             response.writeHead(404)
