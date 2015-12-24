@@ -22,7 +22,7 @@ describe('DefaultBuilder', function() {
         expect(instance.update({}, {})).to.equal(instance)
     })
 
-    it('Update the routes structure', function () {
+    it('Update the routes structure and contain STRICT path routes', function () {
         let instance = new DefaultBuilder()
 
         let routes = {}
@@ -30,6 +30,17 @@ describe('DefaultBuilder', function() {
         instance.update(routes, exampleConfig.routesDefinition)
 
         expect(routes['/test'][0].route.endpoint).to.be.equal('http://domain.tld')
+    })
+
+    it('Update the routes structure and contain REGEX path routes', function () {
+        let instance = new DefaultBuilder()
+
+        let routes = {}
+
+        instance.update(routes, exampleConfig.regexDefinition)
+
+        expect(routes.ANY[0].route.endpoint).to.be.equal('http://domain.tld/regex')
+        expect(routes.ANY[1].route.endpoint).to.be.equal('http://domain.tld/regex-full')
     })
 
     it('Update the routes structure including POST, sorted by complexity', function () {

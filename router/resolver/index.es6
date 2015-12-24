@@ -38,7 +38,7 @@ export default class Resolver {
         }
 
         for (let matcher of matchList) {
-            if (this.matchMethod(matcher, request) && this.matchHeaders(matcher, request)) {
+            if (this.matchMethod(matcher, request) && this.matchHeaders(matcher, request) && this.matchRegexPath(matcher, request)) {
                 return matcher.route
             }
         }
@@ -56,5 +56,15 @@ export default class Resolver {
         }
 
         return _.every(matcher.headers, header => request.headers[header.name] === header.value)
+    }
+
+    matchRegexPath(matcher, request) {
+        if (!matcher.path) {
+            return true
+        }
+
+        let match = new RegExp(matcher.path.match)
+
+        return match.test(request.url)
     }
 }

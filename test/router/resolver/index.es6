@@ -50,6 +50,15 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
     })
 
+    it('Resolver should resolve REGEX path route', function () {
+        let resolver = new Resolver(new Builder())
+
+        resolver.init(exampleConfig.regexDefinition)
+
+        expect(resolver.match({url: '/abcdefg', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex')
+        expect(resolver.match({url: '/def', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex-full')
+    })
+
     it('Resolver should resolve STRICT path route with POST', function () {
         let resolver = new Resolver(new Builder())
 

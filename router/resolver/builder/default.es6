@@ -8,7 +8,6 @@ const logger = Logger.instance()
 
 const STRICT = 'STRICT'
 const REGEX = 'REGEX'
-const IGNORED_MATCHERS = ['path']
 
 export default class DefaultBuilder {
     constructor() {
@@ -58,7 +57,7 @@ export default class DefaultBuilder {
     }
 
     createMatchDefinition(route) {
-        let matchers = _.omit(route.matcher, IGNORED_MATCHERS)
+        let matchers = _.omit(route.matcher, (definition, name) => name === 'path' && definition.type === STRICT)
 
         return Object.assign(matchers, {route: route})
     }

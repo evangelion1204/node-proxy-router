@@ -12,19 +12,28 @@ export const strictDefinition = {
     }
 }
 
-export const regexpDefinition = {
-    regexp: {
+export const regexDefinition = {
+    regex: {
         matcher: {
             path: {
-                match: '/catalog-*',
+                match: '^/abc',
                 type: 'REGEX'
             }
         },
-        endpoint: 'http://domain.tld'
+        endpoint: 'http://domain.tld/regex'
+    },
+    regexFull: {
+        matcher: {
+            path: {
+                match: '^/def$',
+                type: 'REGEX'
+            }
+        },
+        endpoint: 'http://domain.tld/regex-full'
     }
 }
 
-export const routesDefinition = Object.assign({}, strictDefinition, regexpDefinition)
+export const routesDefinition = Object.assign({}, strictDefinition, regexDefinition)
 
 export const routesWithPostDefinition = Object.assign({}, routesDefinition, {
     strictPost: {
