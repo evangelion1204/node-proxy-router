@@ -1,6 +1,7 @@
 'use strict'
 
 import Logger from '../../lib/logger'
+import {Tree} from 'radix-tree'
 
 const _ = require('lodash')
 const url = require('url')
@@ -9,12 +10,12 @@ const logger = Logger.instance()
 
 export default class Resolver {
     constructor(routeBuilder) {
-        this.routes = {}
+        this.routes = new Tree()
         this.routeBuilder = routeBuilder
     }
 
     init(routes) {
-        this.routes = {}
+        this.routes = new Tree()
         this.routeBuilder.update(this.routes, routes)
 
         return this
@@ -31,11 +32,16 @@ export default class Resolver {
     }
 
     matchPath(tree, request) {
-        let matchList = tree[request.url] || tree.ANY
+        let lookup = tree.find(request.url) || tree.find(tree.ANY)
 
-        if (!matchList) {
+        if (!lookup) {
             return false
         }
+
+
+        logger.log(`Route ${lookup.path} matching, performing further matches`)
+
+        let matchList = lookup.data
 
         for (let matcher of matchList) {
             if (this.matchMethod(matcher, request) && this.matchHeaders(matcher, request) && this.matchRegexPath(matcher, request)) {

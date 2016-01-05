@@ -47,9 +47,16 @@ export default class DefaultBuilder {
                 routes[pathSelector] = []
             }
 
-            routes[pathSelector].push(this.createMatchDefinition(route))
+            let result = routes.find(pathSelector)
 
-            routes[pathSelector].sort((a, b) => Object.keys(b).length - Object.keys(a).length)
+            if (!result) {
+                routes.add(pathSelector, [])
+                result = routes.find(pathSelector)
+            }
+
+            result.data.push(this.createMatchDefinition(route))
+
+            result.data.sort((a, b) => Object.keys(b).length - Object.keys(a).length)
 
             return routes
         }.bind(this), target)
