@@ -11,6 +11,7 @@
     "transform-es2015-template-literals",
     "transform-es2015-spread",
     "transform-es2015-destructuring",
-    "syntax-object-rest-spread"
+    "syntax-object-rest-spread",
+    "transform-es2015-arrow-functions"
   ]
 }
