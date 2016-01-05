@@ -1,6 +1,6 @@
 'use strict'
 
-import Logger from '../../../lib/logger'
+import Logger from '../../logger'
 
 const _ = require('lodash')
 

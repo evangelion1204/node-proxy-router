@@ -4,13 +4,23 @@
   "description": "A reverse proxy / router in node",
   "main": "index.js",
   "scripts": {
-    "prestart": "babel . --extensions .es6 --out-dir .",
-    "pretest": "babel . --extensions .es6 --out-dir .",
+    "predistribute": "babel src --out-dir lib",
+    "prestart": "babel src --out-dir lib",
     "start": "node --harmony index.js --port 3000 --config ../config/router.json --routes ./config/routes.json",
-    "test": "mocha --harmony test --recursive"
+    "test": "babel-node ./node_modules/.bin/_mocha",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
+    "distribute": "npm publish"
   },
-  "author": "",
+  "author": "Michael Iwersen <mi.iwersen@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evangelion1204/node-proxy-router/issues"
+  },
+  "keywords": [
+    "router",
+    "proxy"
+  ],
+  "homepage": "https://github.com/evangelion1204/node-proxy-router#readme",
   "dependencies": {
     "babel-cli": "^6.2.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.2.0",
@@ -19,12 +29,14 @@
     "co": "^4.6.0",
     "commander": "^2.9.0",
     "cookies": "^0.5.1",
+    "isparta": "^4.0.0",
     "koa-compose": "^2.3.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
     "radix-tree": "^0.1.2",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
+    "supertest": "^1.1.0",
     "uuid": "^2.0.1"
   }
 }

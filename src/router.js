@@ -1,6 +1,6 @@
 'use strict'
 
-import Logger from '../lib/logger'
+import Logger from './logger'
 import http from 'http'
 import https from 'https'
 import Resolver from './resolver'

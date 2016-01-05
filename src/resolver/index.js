@@ -1,6 +1,6 @@
 'use strict'
 
-import Logger from '../../lib/logger'
+import Logger from '../logger'
 import {Tree} from 'radix-tree'
 
 const _ = require('lodash')
