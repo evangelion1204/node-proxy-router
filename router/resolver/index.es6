@@ -32,7 +32,7 @@ export default class Resolver {
     }
 
     matchPath(tree, request) {
-        let lookup = tree.find(request.url) || tree.find(tree.ANY)
+        let lookup = tree.find(request.url) || tree.find('ANY')
 
         if (!lookup) {
             return false
