@@ -1,6 +1,0 @@
-{
-  "resources": {
-    "styles": ["//cdn:3006/login/styles.css"],
-    "scripts": ["//cdn:3006/login/script.js"]
-  }
-}
