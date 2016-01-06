@@ -1,13 +1,12 @@
 'use strict'
 
-const koa = require('koa')
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const expect = chai.expect
 
-import Resolver from '../../../src/resolver'
-import Builder from '../../../src/resolver/builder/default'
+import Resolver from '../../src/resolver'
+import Builder from '../../src/resolver/builder/default'
 
 import * as exampleConfig from './builder/configs'
 
@@ -36,7 +35,7 @@ describe('Resolver', function() {
         expect(resolver.init({test: {}})).to.be.equal(resolver)
 
         expect(mockedBuilder.update).to.be.calledWith(
-            {},
+            resolver.routes,
             {test: {}}
         )
         expect(mockedBuilder.update).to.be.calledOnce

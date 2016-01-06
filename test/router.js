@@ -23,9 +23,9 @@ describe('Router', function() {
     })
 
     it('a http request should be handled with a 404 if no routes are defined', function (done) {
-        let app = new Router()
+        let router = new Router()
 
-        request(app.listen())
+        request(router.listen())
             .get('/')
             .expect(404, done)
     })
@@ -37,9 +37,10 @@ describe('Router', function() {
         }).listen(configs.routerPort)
 
 
-        let app = new Router({routes: configs.routerBaseDefinition})
+        let router = new Router()
+        router.addRoutes(configs.routerBaseDefinition)
 
-        request(app.listen())
+        request(router.listen())
             .get('/')
             .expect(200, function () {
                 server.close()
@@ -55,9 +56,10 @@ describe('Router', function() {
             response.end()
         }).listen(configs.routerPort)
 
-        let app = new Router({routes: configs.routerBaseDefinition})
+        let router = new Router()
+        router.addRoutes(configs.routerBaseDefinition)
 
-        request(app.listen())
+        request(router.listen())
             .get('/')
             .expect(302)
             .expect('Location', '/redirect')
@@ -74,9 +76,10 @@ describe('Router', function() {
             response.end()
         }).listen(configs.routerPort)
 
-        let app = new Router({routes: configs.routerBaseWithFilterDefinition})
+        let router = new Router()
+        router.addRoutes(configs.routerBaseWithFilterDefinition)
 
-        request(app.listen())
+        request(router.listen())
             .get('/')
             .expect(200, function () {
                 server.close()

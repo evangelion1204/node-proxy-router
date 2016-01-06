@@ -27,9 +27,8 @@ if (routesPath) {
 
 const routes = require(routesPath)
 
-const app = new Router({
-    routes: routes
-})
+const app = new Router()
+app.addRoutes(routes)
 
 app.listen(port)
 

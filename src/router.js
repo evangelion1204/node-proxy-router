@@ -13,16 +13,20 @@ const cookies = require('cookies')
 const compose = require('koa-compose')
 const co = require('co')
 
-const agent = new http.Agent({keepAlive: true})
-
+const defaultAgent = new http.Agent({keepAlive: true})
 
 export default class Router {
-    constructor (options = {routes: {}}) {
-        this.options = options
+    constructor (options = {}) {
+        this.options = Object.assign({
+            agent: defaultAgent
+        }, options)
 
         this.resolver = new Resolver(new Builder())
         this.filterBuilder = new FilterBuilder(options)
-        this.resolver.init(this.options.routes)
+    }
+
+    addRoutes(routes) {
+        this.resolver.init(routes)
     }
 
     listen(port) {
@@ -81,7 +85,7 @@ export default class Router {
 
     *requestProxyMiddleware() {
         let parsedEndpoint = url.parse(this.route.endpoint)
-        let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: agent, headers: Object.assign({}, this.request.headers)}))
+        let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: defaultAgent, headers: Object.assign({}, this.request.headers)}))
 
         proxyRequest.on('error', function (error) {
             this.response.writeHead(500)

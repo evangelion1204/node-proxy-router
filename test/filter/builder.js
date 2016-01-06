@@ -1,13 +1,12 @@
 'use strict'
 
-const koa = require('koa')
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const expect = chai.expect
 
-import FilterBuilder from '../../../src/filter/builder'
-import CookieFilter from '../../../src/filter/cookie'
+import FilterBuilder from '../../src/filter/builder'
+import CookieFilter from '../../src/filter/cookie'
 
 chai.use(sinonChai)
 

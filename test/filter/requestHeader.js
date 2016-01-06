@@ -1,6 +1,5 @@
 'use strict'
 
-const koa = require('koa')
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
@@ -9,7 +8,7 @@ const compose = require('koa-compose')
 const co = require('co')
 const cookies = require('cookies')
 
-import Filter from '../../../src/filter/requestHeader'
+import Filter from '../../src/filter/requestHeader'
 
 chai.use(sinonChai)
 
