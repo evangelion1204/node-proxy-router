@@ -12,7 +12,7 @@ const http = require('http')
 
 import Router from '../src/router'
 
-import * as configs from './resolver/builder/configs'
+import * as configs from './builder/configs'
 
 chai.use(sinonChai)
 
@@ -38,7 +38,7 @@ describe('Router', function() {
 
 
         let router = new Router()
-        router.addRoutes(configs.routerBaseDefinition)
+        router.addRoute('/',`http://localhost:${configs.routerPort}`)
 
         request(router.listen())
             .get('/')
@@ -57,7 +57,7 @@ describe('Router', function() {
         }).listen(configs.routerPort)
 
         let router = new Router()
-        router.addRoutes(configs.routerBaseDefinition)
+        router.addRoute('/',`http://localhost:${configs.routerPort}`)
 
         request(router.listen())
             .get('/')
@@ -77,7 +77,12 @@ describe('Router', function() {
         }).listen(configs.routerPort)
 
         let router = new Router()
-        router.addRoutes(configs.routerBaseWithFilterDefinition)
+        router.addRoute('/',`http://localhost:${configs.routerPort}`, 'strict', null, [
+            {
+                name: 'requestHeader',
+                args: ['header', 'value']
+            }
+        ])
 
         request(router.listen())
             .get('/')
