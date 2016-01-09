@@ -37,23 +37,25 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
     })
 
-    //it('Resolver should resolve REGEX path route', function () {
-    //    let resolver = new Resolver(new Builder())
-    //
-    //    resolver.init(exampleConfig.regexDefinition)
-    //
-    //    expect(resolver.match({url: '/abcdefg', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex')
-    //    expect(resolver.match({url: '/def', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex-full')
-    //})
-    //
-    //it('Resolver should resolve STRICT path route with POST', function () {
-    //    let resolver = new Resolver(new Builder())
-    //
-    //    resolver.init(exampleConfig.routesWithPostDefinition)
-    //
-    //    expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
-    //})
-    //
+    it('Resolver should resolve REGEX path route', function () {
+        let resolver = new Resolver()
+
+        resolver.addRegexRoute('^/abc', 'http://domain.tld/regex', 'starts')
+        resolver.addRegexRoute('^/def$', 'http://domain.tld/regex-full', 'full')
+
+        expect(resolver.match({url: '/abcdefg', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex')
+        expect(resolver.match({url: '/def', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex-full')
+    })
+
+    it('Resolver should resolve STRICT path route with POST', function () {
+        let resolver = new Resolver()
+
+        resolver.addRoute('/test', 'http://domain.tld/', 'get')
+        resolver.addRoute('/test', 'http://domain.tld/new', 'post', 'POST')
+
+        expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
+    })
+
     //it('Resolver should resolve STRICT header route', function () {
     //    let resolver = new Resolver(new Builder())
     //

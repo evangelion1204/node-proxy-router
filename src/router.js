@@ -30,6 +30,10 @@ export default class Router {
         this.resolver.addRoute(path, endpoint, id, method, filters)
     }
 
+    addRegexRoute(regex, endpoint, id = '', method = null, filters = []) {
+        this.resolver.addRegexRoute(regex, endpoint, id, method, filters)
+    }
+
     listen(port) {
         this._server = http.createServer(this.onRequest.bind(this))
 

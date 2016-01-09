@@ -76,7 +76,8 @@ export default class Resolver {
             id: id || path,
             matcher: {
                 path: {
-                    match: path
+                    match: path,
+                    type: STRICT
                 }
             },
             filters: filters,
@@ -88,6 +89,26 @@ export default class Resolver {
         }
 
         this.addRawRoute(route, path)
+    }
+
+    addRegexRoute(regex, endpoint, id = '', method = null, filters = []) {
+        let route = {
+            id: id || regex,
+            matcher: {
+                path: {
+                    match: regex,
+                    type: REGEX
+                }
+            },
+            filters: filters,
+            endpoint: endpoint
+        }
+
+        if (method) {
+            route.matcher.method = method
+        }
+
+        this.addRawRoute(route, 'ANY')
     }
 
     addRawRoute(route, path) {

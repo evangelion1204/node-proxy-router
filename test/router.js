@@ -91,4 +91,23 @@ describe('Router', function() {
                 done.apply(this, arguments)
             })
     })
+
+    it('a http request with a regex route should return the 200 result of the proxied endpoint', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+        router.addRegexRoute('^/abc',`http://localhost:${configs.routerPort}`)
+
+        request(router.listen())
+            .get('/abcdef')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
+
 })
