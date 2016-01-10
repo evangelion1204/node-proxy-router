@@ -28,10 +28,20 @@ export default class Router {
 
     addRoute(path, endpoint, id = '', method = null, filters = []) {
         this.resolver.addRoute(path, endpoint, id, method, filters)
+
+        return this
     }
 
     addRegexRoute(regex, endpoint, id = '', method = null, filters = []) {
         this.resolver.addRegexRoute(regex, endpoint, id, method, filters)
+
+        return this
+    }
+
+    addComplexRoute(route) {
+        this.resolver.addRawRoute(route)
+
+        return this
     }
 
     listen(port) {

@@ -110,4 +110,30 @@ describe('Router', function() {
             })
     })
 
+    it('a http request with a complex route should return the 200 result of the proxied endpoint', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+        router.addComplexRoute({
+            matcher: {
+                path: {
+                    match: '^/abc',
+                    type: 'REGEX'
+                }
+            },
+            endpoint: `http://localhost:${configs.routerPort}`
+        })
+
+        request(router.listen())
+            .get('/abcdef')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
+
 })

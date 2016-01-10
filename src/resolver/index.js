@@ -111,7 +111,11 @@ export default class Resolver {
         this.addRawRoute(route, 'ANY')
     }
 
-    addRawRoute(route, path) {
+    addRawRoute(route, path = 'ANY') {
+        if (route.matcher.path && route.matcher.path.type === STRICT) {
+            path = route.matcher.path.match
+        }
+
         let result = this.routes.find(path)
 
         if (!result) {

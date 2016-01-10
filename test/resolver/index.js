@@ -56,11 +56,11 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
     })
 
-    //it('Resolver should resolve STRICT header route', function () {
-    //    let resolver = new Resolver(new Builder())
-    //
-    //    resolver.init(exampleConfig.strictHeaderAjaxDefinition)
-    //
-    //    expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
-    //})
+    it('Resolver should resolve STRICT header route', function () {
+        let resolver = new Resolver()
+
+        resolver.addRawRoute(exampleConfig.strictHeaderAjaxDefinition.strict)
+
+        expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
+    })
 })
