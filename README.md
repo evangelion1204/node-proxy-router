@@ -10,16 +10,3 @@ Routes are matched against all parts of a HTTP request. Currently implemented ar
     * STRICT - an exact match to the corresponding path
     * REGEX - a regular expression match
  
-## Options
-
-### --config or -c
-
-tbd
-
-### --routes or -r
-
-tbd
-
-### --port or -p
-
-tbd

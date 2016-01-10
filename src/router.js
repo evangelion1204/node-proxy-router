@@ -4,7 +4,7 @@ import Logger from './logger'
 import http from 'http'
 import https from 'https'
 import Resolver from './resolver'
-import Builder from './resolver/builder/default'
+//import Builder from 'builder/default'
 import FilterBuilder from './filter/builder'
 
 const logger = Logger.instance()
@@ -21,12 +21,27 @@ export default class Router {
             agent: defaultAgent
         }, options)
 
-        this.resolver = new Resolver(new Builder())
+        this.resolver = new Resolver()
+        //this.builder = new Builder(this.resolver)
         this.filterBuilder = new FilterBuilder(options)
     }
 
-    addRoutes(routes) {
-        this.resolver.init(routes)
+    addRoute(path, endpoint, id = '', method = null, filters = []) {
+        this.resolver.addRoute(path, endpoint, id, method, filters)
+
+        return this
+    }
+
+    addRegexRoute(regex, endpoint, id = '', method = null, filters = []) {
+        this.resolver.addRegexRoute(regex, endpoint, id, method, filters)
+
+        return this
+    }
+
+    addComplexRoute(route) {
+        this.resolver.addRawRoute(route)
+
+        return this
     }
 
     listen(port) {
