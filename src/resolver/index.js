@@ -2,6 +2,7 @@
 
 import Logger from '../logger'
 import {Tree} from 'radix-tree'
+import RouteBuilder from '../builder/route'
 
 const _ = require('lodash')
 const url = require('url')
@@ -72,43 +73,35 @@ export default class Resolver {
     //}
 
     addRoute(path, endpoint, id = '', method = null, filters = []) {
-        let route = {
-            id: id || path,
-            matcher: {
-                path: {
-                    match: path,
-                    type: STRICT
-                }
-            },
-            filters: filters,
-            endpoint: endpoint
-        }
+        let builder = new RouteBuilder()
+
+        builder
+            .setId(id || path)
+            .setStrictPath(path)
+            .setEndpoint(endpoint)
+            .setFilters(filters)
 
         if (method) {
-            route.matcher.method = method
+            builder.setMethod(method)
         }
 
-        this.addRawRoute(route, path)
+        this.addRawRoute(builder.route, path)
     }
 
-    addRegexRoute(regex, endpoint, id = '', method = null, filters = []) {
-        let route = {
-            id: id || regex,
-            matcher: {
-                path: {
-                    match: regex,
-                    type: REGEX
-                }
-            },
-            filters: filters,
-            endpoint: endpoint
-        }
+    addRegexRoute(path, endpoint, id = '', method = null, filters = []) {
+        let builder = new RouteBuilder()
+
+        builder
+            .setId(id || path)
+            .setRegexPath(path)
+            .setEndpoint(endpoint)
+            .setFilters(filters)
 
         if (method) {
-            route.matcher.method = method
+            builder.setMethod(method)
         }
 
-        this.addRawRoute(route, 'ANY')
+        this.addRawRoute(builder.route, 'ANY')
     }
 
     addRawRoute(route, path = 'ANY') {
