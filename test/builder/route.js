@@ -49,6 +49,20 @@ describe('Route Builder', function() {
         expect(instance.route).to.deep.equal({matcher: {}, filters: [1, 2]})
     })
 
+    it('addFilter should create a valid route and allow chaining', function () {
+        let instance = new Builder()
+
+        expect(instance.addFilter(1).addFilter(2)).to.equal(instance)
+        expect(instance.route).to.deep.equal({matcher: {}, filters: [1, 2]})
+    })
+
+    it('matchHeader should create a valid route and allow chaining', function () {
+        let instance = new Builder()
+
+        expect(instance.matchHeader('header', 'value')).to.equal(instance)
+        expect(instance.route).to.deep.equal({matcher: {headers: [{name: 'header', value: 'value', type: 'STRICT'}]}})
+    })
+
     it('setMethod should create a valid route and allow chaining', function () {
         let instance = new Builder()
 

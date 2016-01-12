@@ -98,8 +98,15 @@ router.newRoute()
   .save()
   
 router.newRoute()
+  .setStrictPath('/mytarget/cart')
+  .matchHeader('HTTP_X_REQUESTED_WITH', 'xmlhttprequest')
+  .setEndpoint('http://domain.tld/register')
+  .setId('register')
+  .save()
+  
+router.newRoute()
   .setRegexPath('^/mytarget')
   .setEndpoint('http://domain.tld')
-  .setId('register')
+  .setId('root')
   .save()
 ```

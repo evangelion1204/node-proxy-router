@@ -50,8 +50,32 @@ export default class Route {
         return this
     }
 
+    addFilter(filter) {
+        if (!this._route.filters) {
+            this._route.filters = []
+        }
+
+        this._route.filters.push(filter)
+
+        return this
+    }
+
     setFilters(filters) {
         this._route.filters = filters
+
+        return this
+    }
+
+    matchHeader(header, value) {
+        if (!this._route.matcher.headers) {
+            this._route.matcher.headers = []
+        }
+
+        this._route.matcher.headers.push({
+            name: header,
+            value: value,
+            type: STRICT
+        })
 
         return this
     }
