@@ -41,7 +41,7 @@ export default class Router {
         return this.resolver.newRoute(id)
     }
 
-    addComplexRoute(route) {
+    addRawRoute(route) {
         this.resolver.addRawRoute(route)
 
         return this

@@ -118,7 +118,7 @@ describe('Router', function() {
 
 
         let router = new Router()
-        router.addComplexRoute({
+        router.addRawRoute({
             matcher: {
                 path: {
                     match: '^/abc',
