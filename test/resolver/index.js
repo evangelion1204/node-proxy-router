@@ -21,7 +21,7 @@ describe('Resolver', function() {
         //}
     })
 
-    it('Resolver should be available', function () {
+    it('should be available', function () {
         expect(Resolver).to.be.a('function')
     })
 
@@ -29,7 +29,7 @@ describe('Resolver', function() {
         expect(new Resolver()).to.be.an('object')
     })
 
-    it('Resolver should resolve STRICT path route', function () {
+    it('should resolve STRICT path route', function () {
         let resolver = new Resolver()
 
         resolver.addRoute('/test', 'http://domain.tld')
@@ -37,7 +37,7 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
     })
 
-    it('Resolver should resolve REGEX path route', function () {
+    it('should resolve REGEX path route', function () {
         let resolver = new Resolver()
 
         resolver.addRegexRoute('^/abc', 'http://domain.tld/regex', 'starts')
@@ -47,7 +47,7 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/def', method: 'GET'}).endpoint).to.be.equal('http://domain.tld/regex-full')
     })
 
-    it('Resolver should resolve STRICT path route with POST', function () {
+    it('should resolve STRICT path route with POST', function () {
         let resolver = new Resolver()
 
         resolver.addRoute('/test', 'http://domain.tld/', 'get')
@@ -56,10 +56,27 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
     })
 
-    it('Resolver should resolve STRICT header route', function () {
+    it('should resolve STRICT header route', function () {
         let resolver = new Resolver()
 
         resolver.addRawRoute(exampleConfig.strictHeaderAjaxDefinition.strict)
+
+        expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
+    })
+
+    it('should resolve STRICT path route with POST if added via route builder', function () {
+        let resolver = new Resolver()
+
+        resolver.newRoute().matchPath('/test').toEndpoint('http://domain.tld/').setId('get').save()
+        resolver.newRoute().matchPath('/test').toEndpoint('http://domain.tld/new').setId('post').matchMethod('POST').save()
+
+        expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
+    })
+    
+    it('should resolve header route added via route builder', function () {
+        let resolver = new Resolver()
+
+        resolver.newRoute().matchPath('/').toEndpoint('http://domain.tld/ajax').setId('ajax').save()
 
         expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
     })
