@@ -6,10 +6,12 @@ const STRICT = 'STRICT'
 const REGEX = 'REGEX'
 
 export default class Route {
-    constructor() {
+    constructor(resolver) {
         this._route = {
             matcher: {}
         }
+
+        this._resolver = resolver
     }
 
     setId(id) {
@@ -56,5 +58,15 @@ export default class Route {
 
     get route() {
         return this._route
+    }
+
+    save() {
+        if (!this._resolver) {
+            throw new Error('A resolver must be set in order to call save()')
+        }
+
+        this._resolver.addRawRoute(this.route)
+
+        return this._resolver
     }
 }

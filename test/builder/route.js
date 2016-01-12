@@ -55,4 +55,26 @@ describe('Route Builder', function() {
         expect(instance.setMethod('POST')).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {method: 'POST'}})
     })
+
+    it('save should invoke addRawRoute of resolver', function () {
+        let mockedResolver = {
+            addRawRoute: sinon.spy()
+        }
+
+        let instance = new Builder(mockedResolver)
+
+        instance.setMethod('POST').save()
+
+        expect(instance.route).to.deep.equal({matcher: {method: 'POST'}})
+        expect(mockedResolver.addRawRoute).to.be.called
+    })
+
+    it('save should throw an exception if resolver is missing', function () {
+        let instance = new Builder()
+
+        expect(function () {
+            instance.setMethod('POST').save()
+        }).to.throw('A resolver must be set in order to call save()')
+
+    })
 })

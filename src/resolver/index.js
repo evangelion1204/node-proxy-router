@@ -127,6 +127,16 @@ export default class Resolver {
         return Object.assign(matchers, {route: route})
     }
 
+    newRoute(id) {
+        let builder = new RouteBuilder(this)
+
+        if (id) {
+            builder.setId(id)
+        }
+
+        return builder
+    }
+
     match(request) {
         let result
 

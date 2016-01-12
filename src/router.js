@@ -4,7 +4,6 @@ import Logger from './logger'
 import http from 'http'
 import https from 'https'
 import Resolver from './resolver'
-//import Builder from 'builder/default'
 import FilterBuilder from './filter/builder'
 
 const logger = Logger.instance()
@@ -36,6 +35,10 @@ export default class Router {
         this.resolver.addRegexRoute(regex, endpoint, id, method, filters)
 
         return this
+    }
+
+    newRoute(id) {
+        return this.resolver.newRoute(id)
     }
 
     addComplexRoute(route) {

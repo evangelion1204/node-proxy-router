@@ -63,4 +63,13 @@ describe('Resolver', function() {
 
         expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
     })
+
+    it('should resolve STRICT path route with POST if added via route builder', function () {
+        let resolver = new Resolver()
+
+        resolver.newRoute().setStrictPath('/test').setEndpoint('http://domain.tld/').setId('get').save()
+        resolver.newRoute().setStrictPath('/test').setEndpoint('http://domain.tld/new').setId('post').setMethod('POST').save()
+
+        expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
+    })
 })
