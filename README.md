@@ -107,3 +107,31 @@ router.newRoute()
   .toEndpoint('http://domain.tld')
   .save()
 ```
+
+#### Filters / Middleware
+
+Filters act like middleware but are specified and added to each route separately. They can be used to modify the request or response.
+
+The following filters are built-in:
+- cookie - used to map a cookie to a header (request) and header to cookie (response)
+- requestHeader - adds a header to a request
+- responseHeader - adds a header to a response
+
+Filters are autoloaded by name from defined directories, this can be configured like
+
+```js
+router.registerFilterDirectory()
+```
+
+##### Loading custom filters
+
+##### With route builder
+
+```js
+router.newRoute()
+  .matchPath('/mytarget')
+  .toEndpoint('http://domain.tld')
+  .withFilter('requestHeader', 'name', 'value')
+  .withFilter('responseHeader', 'name', 'value')
+  .save()
+```

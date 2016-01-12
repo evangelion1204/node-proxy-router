@@ -164,5 +164,30 @@ describe('Router', function() {
             })
     })
 
+    it('custom filters from a include directory should be usable', function (done) {
+        let server = http.createServer(function (request, response) {
+            expect(request.headers['custom-filter']).to.be.equal('value')
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+        let router = new Router()
+
+        expect(router.registerFilterDirectory(__dirname + '/stubs')).to.be.equal(router)
+
+        let route = router.newRoute('test')
+        route
+            .matchPath('/')
+            .withFilter('customFilter', 'value')
+            .toEndpoint(`http://localhost:${configs.routerPort}`)
+            .save()
+
+        request(router.listen())
+            .get('/')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
 
 })

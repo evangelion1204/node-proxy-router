@@ -50,12 +50,16 @@ export default class Route {
         return this
     }
 
-    withFilter(filter) {
+    withFilter(filter, ...filterArgs) {
         if (!this._route.filters) {
             this._route.filters = []
         }
 
-        this._route.filters.push(filter)
+        this._route.filters.push({
+            name: filter,
+            args: filterArgs
+        })
+
 
         return this
     }
