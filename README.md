@@ -91,22 +91,19 @@ The easier way to build routes is the usage of the builder interface.
 
 ```js
 router.newRoute()
-  .setStrictPath('/mytarget/register')
-  .setMethod('POST')
-  .setEndpoint('http://domain.tld/register')
-  .setId('register')
+  .matchPath('/mytarget/register')
+  .matchMethod('POST')
+  .toEndpoint('http://domain.tld/register')
   .save()
   
 router.newRoute()
-  .setStrictPath('/mytarget/cart')
+  .matchPath('/mytarget/cart')
   .matchHeader('HTTP_X_REQUESTED_WITH', 'xmlhttprequest')
-  .setEndpoint('http://domain.tld/register')
-  .setId('register')
+  .toEndpoint('http://domain.tld/register')
   .save()
   
 router.newRoute()
-  .setRegexPath('^/mytarget')
-  .setEndpoint('http://domain.tld')
-  .setId('root')
+  .matchRegexPath('^/mytarget')
+  .toEndpoint('http://domain.tld')
   .save()
 ```

@@ -20,7 +20,7 @@ export default class Route {
         return this
     }
 
-    setStrictPath(path) {
+    matchPath(path) {
         this._route.matcher.path = {
             match: path,
             type: STRICT
@@ -29,7 +29,7 @@ export default class Route {
         return this
     }
 
-    setRegexPath(path) {
+    matchRegexPath(path) {
         this._route.matcher.path = {
             match: path,
             type: REGEX
@@ -38,19 +38,19 @@ export default class Route {
         return this
     }
 
-    setEndpoint(endpoint) {
+    toEndpoint(endpoint) {
         this._route.endpoint = endpoint
 
         return this
     }
 
-    setMethod(method) {
+    matchMethod(method) {
         this._route.matcher.method = method
 
         return this
     }
 
-    addFilter(filter) {
+    withFilter(filter) {
         if (!this._route.filters) {
             this._route.filters = []
         }
@@ -60,7 +60,7 @@ export default class Route {
         return this
     }
 
-    setFilters(filters) {
+    withFilters(filters) {
         this._route.filters = filters
 
         return this

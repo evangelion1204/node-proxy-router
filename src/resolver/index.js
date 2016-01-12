@@ -77,12 +77,12 @@ export default class Resolver {
 
         builder
             .setId(id || path)
-            .setStrictPath(path)
-            .setEndpoint(endpoint)
-            .setFilters(filters)
+            .matchPath(path)
+            .withFilters(filters)
+            .toEndpoint(endpoint)
 
         if (method) {
-            builder.setMethod(method)
+            builder.matchMethod(method)
         }
 
         this.addRawRoute(builder.route, path)
@@ -93,12 +93,12 @@ export default class Resolver {
 
         builder
             .setId(id || path)
-            .setRegexPath(path)
-            .setEndpoint(endpoint)
-            .setFilters(filters)
+            .matchRegexPath(path)
+            .withFilters(filters)
+            .toEndpoint(endpoint)
 
         if (method) {
-            builder.setMethod(method)
+            builder.matchMethod(method)
         }
 
         this.addRawRoute(builder.route, 'ANY')

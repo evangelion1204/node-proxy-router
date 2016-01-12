@@ -146,14 +146,14 @@ describe('Router', function() {
         let router = new Router()
         let route = router.newRoute('test')
         route
-            .setStrictPath('/')
-            .setFilters([
+            .matchPath('/')
+            .withFilters([
                 {
                     name: 'requestHeader',
                     args: ['header', 'value']
                 }
             ])
-            .setEndpoint(`http://localhost:${configs.routerPort}`)
+            .toEndpoint(`http://localhost:${configs.routerPort}`)
             .save()
 
         request(router.listen())

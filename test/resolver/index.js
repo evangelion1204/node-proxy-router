@@ -67,8 +67,8 @@ describe('Resolver', function() {
     it('should resolve STRICT path route with POST if added via route builder', function () {
         let resolver = new Resolver()
 
-        resolver.newRoute().setStrictPath('/test').setEndpoint('http://domain.tld/').setId('get').save()
-        resolver.newRoute().setStrictPath('/test').setEndpoint('http://domain.tld/new').setId('post').setMethod('POST').save()
+        resolver.newRoute().matchPath('/test').toEndpoint('http://domain.tld/').setId('get').save()
+        resolver.newRoute().matchPath('/test').toEndpoint('http://domain.tld/new').setId('post').matchMethod('POST').save()
 
         expect(resolver.match({url: '/test', method: 'POST'}).endpoint).to.be.equal('http://domain.tld/new')
     })
@@ -76,7 +76,7 @@ describe('Resolver', function() {
     it('should resolve header route added via route builder', function () {
         let resolver = new Resolver()
 
-        resolver.newRoute().setStrictPath('/').setEndpoint('http://domain.tld/ajax').setId('ajax').save()
+        resolver.newRoute().matchPath('/').toEndpoint('http://domain.tld/ajax').setId('ajax').save()
 
         expect(resolver.match({url: '/', method: 'GET', 'headers': {HTTP_X_REQUESTED_WITH: 'xmlhttprequest'}}).endpoint).to.be.equal('http://domain.tld/ajax')
     })

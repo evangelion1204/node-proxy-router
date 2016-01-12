@@ -21,38 +21,38 @@ describe('Route Builder', function() {
         expect(instance.route).to.deep.equal({matcher: {}, id: 'id'})
     })
 
-    it('setEndpoint should allow chaining', function () {
+    it('toEndpoint should allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.setEndpoint('endpoint')).to.equal(instance)
+        expect(instance.toEndpoint('endpoint')).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {}, endpoint: 'endpoint'})
     })
 
-    it('setStrictPath should create a valid route and allow chaining', function () {
+    it('matchPath should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.setStrictPath('path')).to.equal(instance)
+        expect(instance.matchPath('path')).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {path: {match: 'path', type: 'STRICT'}}})
     })
 
-    it('setRegexPath should create a valid route and allow chaining', function () {
+    it('matchRegexPath should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.setRegexPath('path')).to.equal(instance)
+        expect(instance.matchRegexPath('path')).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {path: {match: 'path', type: 'REGEX'}}})
     })
 
-    it('setFilters should create a valid route and allow chaining', function () {
+    it('withFilters should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.setFilters([1, 2])).to.equal(instance)
+        expect(instance.withFilters([1, 2])).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {}, filters: [1, 2]})
     })
 
-    it('addFilter should create a valid route and allow chaining', function () {
+    it('withFilter should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.addFilter(1).addFilter(2)).to.equal(instance)
+        expect(instance.withFilter(1).withFilter(2)).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {}, filters: [1, 2]})
     })
 
@@ -63,10 +63,10 @@ describe('Route Builder', function() {
         expect(instance.route).to.deep.equal({matcher: {headers: [{name: 'header', value: 'value', type: 'STRICT'}]}})
     })
 
-    it('setMethod should create a valid route and allow chaining', function () {
+    it('matchMethod should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.setMethod('POST')).to.equal(instance)
+        expect(instance.matchMethod('POST')).to.equal(instance)
         expect(instance.route).to.deep.equal({matcher: {method: 'POST'}})
     })
 
@@ -77,7 +77,7 @@ describe('Route Builder', function() {
 
         let instance = new Builder(mockedResolver)
 
-        instance.setMethod('POST').save()
+        instance.matchMethod('POST').save()
 
         expect(instance.route).to.deep.equal({matcher: {method: 'POST'}})
         expect(mockedResolver.addRawRoute).to.be.called
@@ -87,7 +87,7 @@ describe('Route Builder', function() {
         let instance = new Builder()
 
         expect(function () {
-            instance.setMethod('POST').save()
+            instance.matchMethod('POST').save()
         }).to.throw('A resolver must be set in order to call save()')
 
     })
