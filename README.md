@@ -107,3 +107,71 @@ router.newRoute()
   .toEndpoint('http://domain.tld')
   .save()
 ```
+
+#### Filters / Middleware
+
+Filters act like middleware but are specified and added to each route separately. They can be used to modify the request or response.
+
+The following filters are built-in:
+- cookie - used to map a cookie to a header (request) and header to cookie (response)
+- requestHeader - adds a header to a request
+- responseHeader - adds a header to a response
+
+Filters are autoloaded by name from defined directories, this can be configured like
+
+```js
+router.registerFilterDirectory()
+```
+
+##### Usage of custom filters
+
+There are two ways to achieve it
+- the filter is autoloaded from the defined include directories
+- a generator is passed instead of a name
+
+###### Autoload
+
+```js
+router.registerFilterDirectory(__dirname + '/filters')
+router.newRoute('customFilter')
+    .matchPath('/')
+    .withFilter('customFilter', 'value')
+    .toEndpoint(`http://domain.tld`)
+    .save()
+```
+
+The custom-filter looks like, it doesn't matter if the new module export or the "old" is being used.
+
+```js
+export default function (filterValue) {
+    return function *(next) {
+        this.request.headers['custom-filter'] = filterValue
+
+        yield next
+    }
+}
+```
+
+###### Direct injecting filter
+
+```js
+router.newRoute('customFilter')
+    .matchPath('/')
+    .withFilter(function *(next) {
+        this.request.headers['custom-filter'] = 'value'
+        yield next
+    })
+    .toEndpoint(`http://domain.tld`)
+    .save()
+```
+
+##### With route builder
+
+```js
+router.newRoute()
+  .matchPath('/mytarget')
+  .toEndpoint('http://domain.tld')
+  .withFilter('requestHeader', 'name', 'value')
+  .withFilter('responseHeader', 'name', 'value')
+  .save()
+```

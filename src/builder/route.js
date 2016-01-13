@@ -50,9 +50,14 @@ export default class Route {
         return this
     }
 
-    withFilter(filter) {
+    withFilter(filter, ...filterArgs) {
         if (!this._route.filters) {
             this._route.filters = []
+        }
+
+        filter = typeof filter === 'function' ? filter : {
+            name: filter,
+            args: filterArgs
         }
 
         this._route.filters.push(filter)

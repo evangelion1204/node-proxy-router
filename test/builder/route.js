@@ -52,8 +52,33 @@ describe('Route Builder', function() {
     it('withFilter should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
-        expect(instance.withFilter(1).withFilter(2)).to.equal(instance)
-        expect(instance.route).to.deep.equal({matcher: {}, filters: [1, 2]})
+        expect(instance.withFilter('filter1', 1, 2).withFilter('filter2', 3, 4)).to.equal(instance)
+        expect(instance.route).to.deep.equal({
+            matcher: {},
+            filters: [
+                {
+                    name: 'filter1',
+                    args: [1, 2]
+                },
+                {
+                    name: 'filter2',
+                    args: [3, 4]
+                }
+            ]
+        })
+    })
+
+    it('withFilter, passing a function should create a valid route and allow chaining', function () {
+        let instance = new Builder()
+
+        function *f1() {}
+        function *f2() {}
+
+        expect(instance.withFilter(f1).withFilter(f2)).to.equal(instance)
+        expect(instance.route).to.deep.equal({
+            matcher: {},
+            filters: [f1, f2]
+        })
     })
 
     it('matchHeader should create a valid route and allow chaining', function () {

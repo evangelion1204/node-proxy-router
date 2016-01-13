@@ -19,7 +19,7 @@ describe('Filter builder', function() {
     it('loadFilter should load filter', function () {
         let builder = new FilterBuilder()
 
-        expect(builder.loadFilter('Cookie') === CookieFilter).to.be.truthy
+        expect(builder.loadFilter('cookie') === CookieFilter).to.be.truthy
     })
 
     it('buildFilters should load and init filters', function () {
@@ -35,5 +35,18 @@ describe('Filter builder', function() {
         expect(filterInitializer).to.be.calledWith('param')
         expect(filters.length).to.be.equal(1)
         expect(filters).to.contain('filter')
+    })
+
+    it('buildFilters detecting a function instead of the filter definition should use this instead', function () {
+        let builder = new FilterBuilder()
+
+        let customFilter = function *(next) {
+            yield next
+        }
+
+        let filters = builder.buildFilters([customFilter])
+
+        expect(filters.length).to.be.equal(1)
+        expect(filters).to.contain(customFilter)
     })
 })

@@ -21,8 +21,7 @@ export default class Router {
         }, options)
 
         this.resolver = new Resolver()
-        //this.builder = new Builder(this.resolver)
-        this.filterBuilder = new FilterBuilder(options)
+        this.filterBuilder = new FilterBuilder()
     }
 
     addRoute(path, endpoint, id = '', method = null, filters = []) {
@@ -43,6 +42,12 @@ export default class Router {
 
     addRawRoute(route) {
         this.resolver.addRawRoute(route)
+
+        return this
+    }
+
+    registerFilterDirectory(path) {
+        this.filterBuilder.addIncludePath(path)
 
         return this
     }
