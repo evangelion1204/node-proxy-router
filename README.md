@@ -123,7 +123,47 @@ Filters are autoloaded by name from defined directories, this can be configured 
 router.registerFilterDirectory()
 ```
 
-##### Loading custom filters
+##### Usage of custom filters
+
+There are two ways to achieve it
+- the filter is autoloaded from the defined include directories
+- a generator is passed instead of a name
+
+###### Autoload
+
+```js
+router.registerFilterDirectory(__dirname + '/filters')
+router.newRoute('customFilter')
+    .matchPath('/')
+    .withFilter('customFilter', 'value')
+    .toEndpoint(`http://domain.tld`)
+    .save()
+```
+
+The custom-filter looks like, it doesn't matter if the new module export or the "old" is being used.
+
+```js
+export default function (filterValue) {
+    return function *(next) {
+        this.request.headers['custom-filter'] = filterValue
+
+        yield next
+    }
+}
+```
+
+###### Direct injecting filter
+
+```js
+router.newRoute('customFilter')
+    .matchPath('/')
+    .withFilter(function *(next) {
+        this.request.headers['custom-filter'] = 'value'
+        yield next
+    })
+    .toEndpoint(`http://domain.tld`)
+    .save()
+```
 
 ##### With route builder
 

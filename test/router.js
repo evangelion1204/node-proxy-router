@@ -175,8 +175,7 @@ describe('Router', function() {
 
         expect(router.registerFilterDirectory(__dirname + '/stubs')).to.be.equal(router)
 
-        let route = router.newRoute('test')
-        route
+        router.newRoute('test')
             .matchPath('/')
             .withFilter('customFilter', 'value')
             .toEndpoint(`http://localhost:${configs.routerPort}`)
@@ -199,8 +198,7 @@ describe('Router', function() {
 
         let router = new Router()
 
-        let route = router.newRoute('test')
-        route
+        router.newRoute('test')
             .matchPath('/')
             .withFilter(function *(next) {
                 this.request.headers['custom-filter'] = 'value'
