@@ -27,6 +27,10 @@ export default class FilterBuilder {
         logger.debug(`Building filters ${JSON.stringify(filters)}`)
 
         return _.map(filters, function (filter) {
+            if (typeof filter === 'function') {
+                return filter
+            }
+
             let filterInitializer = this.loadFilter(filter.name)
 
             return filterInitializer.apply(this, filter.args)

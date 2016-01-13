@@ -190,4 +190,31 @@ describe('Router', function() {
             })
     })
 
+    it('using a custom filter which is injected directly should be usable', function (done) {
+        let server = http.createServer(function (request, response) {
+            expect(request.headers['custom-filter']).to.be.equal('value')
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+        let router = new Router()
+
+        let route = router.newRoute('test')
+        route
+            .matchPath('/')
+            .withFilter(function *(next) {
+                this.request.headers['custom-filter'] = 'value'
+                yield next
+            })
+            .toEndpoint(`http://localhost:${configs.routerPort}`)
+            .save()
+
+        request(router.listen())
+            .get('/')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
+
 })

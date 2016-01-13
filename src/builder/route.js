@@ -55,11 +55,12 @@ export default class Route {
             this._route.filters = []
         }
 
-        this._route.filters.push({
+        filter = typeof filter === 'function' ? filter : {
             name: filter,
             args: filterArgs
-        })
+        }
 
+        this._route.filters.push(filter)
 
         return this
     }
