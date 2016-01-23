@@ -19,58 +19,10 @@ export default class Resolver {
 
     init() {
         this.routes = new Tree()
+        this.routeIndex = {}
 
         return this
     }
-
-    //update(target, newRoutes) {
-    //    this._updateStrictPath(target, newRoutes)
-    //    this._updateOther(target, newRoutes)
-    //
-    //    return this
-    //}
-    //
-    //_updateStrictPath(target, newRoutes) {
-    //    this._updateRoutes(
-    //        target,
-    //        _.filter(newRoutes, (route) => route.matcher && route.matcher.path && route.matcher.path.type === STRICT),
-    //        (route) => route.matcher.path.match
-    //    )
-    //}
-    //
-    //_updateOther(target, newRoutes) {
-    //    this._updateRoutes(
-    //        target,
-    //        _.filter(newRoutes, (route) => route.matcher && (!route.matcher.path || route.matcher.path.type !== STRICT)),
-    //        (route) => 'ANY'
-    //    )
-    //}
-    //
-    //_updateRoutes(target, routes, generatePath) {
-    //    _.reduce(routes, function (routes, route, id) {
-    //        route.id = id
-    //
-    //        let pathSelector = generatePath(route)
-    //
-    //        if (!routes[pathSelector]) {
-    //            routes[pathSelector] = []
-    //        }
-    //
-    //        let result = routes.find(pathSelector)
-    //
-    //        if (!result) {
-    //            routes.add(pathSelector, [])
-    //            result = routes.find(pathSelector)
-    //        }
-    //
-    //        result.data.push(this.createMatchDefinition(route))
-    //
-    //        result.data.sort((a, b) => Object.keys(b).length - Object.keys(a).length)
-    //
-    //        return routes
-    //    }.bind(this), target)
-    //
-    //}
 
     addRoute(path, endpoint, id = '', method = null, filters = []) {
         let builder = new RouteBuilder()
@@ -116,7 +68,10 @@ export default class Resolver {
             result = this.routes.find(path)
         }
 
-        result.data.push(this.createMatchDefinition(route))
+        let matcher = this.createMatchDefinition(route)
+
+        this.routeIndex[matcher.route.id] = matcher
+        result.data.push(matcher)
 
         result.data.sort((a, b) => Object.keys(b).length - Object.keys(a).length)
     }
@@ -135,6 +90,41 @@ export default class Resolver {
         }
 
         return builder
+    }
+
+    removeAll() {
+        this.routes.removeAll()
+
+        Object.keys(this.routeIndex).forEach(key => delete this.routeIndex[key])
+
+        this.init()
+
+        return this
+    }
+
+    removeRoute(id) {
+        let matcher = this.routeIndex[id]
+        const match = (matcher.route.matcher.path && matcher.route.matcher.path.type === STRICT) ?
+            matcher.route.matcher.path.match :
+            'ANY'
+
+        let matchers = this.routes.find(match).data
+        let index = matchers.indexOf(matcher)
+
+        if (index === -1) {
+            return this
+        }
+
+        matchers.splice(index, 1)
+        delete this.routeIndex[id]
+
+        if (matchers.length > 0) {
+            return this
+        }
+
+        this.routes.remove(match)
+
+        return this
     }
 
     match(request) {

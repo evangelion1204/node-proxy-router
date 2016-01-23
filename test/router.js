@@ -215,4 +215,50 @@ describe('Router', function() {
             })
     })
 
+    it('a deleted route should return 404', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+
+        router.addRoute('/test1',`http://localhost:${configs.routerPort}`)
+        router.addRoute('/test2',`http://localhost:${configs.routerPort}`)
+        router.removeRoute('/test2')
+
+        const listener = request(router.listen())
+
+        listener.get('/test1').expect(200, function () {
+            listener.get('/test2').expect(404, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+        })
+    })
+
+    it('after removing all routes every request should return 404', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(200)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+
+        router.addRoute('/test1',`http://localhost:${configs.routerPort}`)
+        router.addRoute('/test2',`http://localhost:${configs.routerPort}`)
+        router.removeAll()
+
+        const listener = request(router.listen())
+
+        listener.get('/test1').expect(404, function () {
+            listener.get('/test2').expect(404, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+        })
+    })
+
 })
