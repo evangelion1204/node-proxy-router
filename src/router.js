@@ -46,6 +46,18 @@ export default class Router {
         return this
     }
 
+    removeRoute(id) {
+        this.resolver.removeRoute(id)
+
+        return this
+    }
+
+    removeAll() {
+        this.resolver.removeAll()
+
+        return this
+    }
+
     registerFilterDirectory(path) {
         this.filterBuilder.addIncludePath(path)
 
