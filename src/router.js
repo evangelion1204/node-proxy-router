@@ -120,7 +120,7 @@ export default class Router {
 
     *requestProxyMiddleware() {
         let parsedEndpoint = url.parse(this.route.endpoint)
-        let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: defaultAgent, headers: Object.assign({}, this.request.headers)}))
+        let proxyRequest = http.request(Object.assign({}, parsedEndpoint, {method: this.request.method , agent: defaultAgent, headers: Object.assign({}, this.request.headers, {host: parsedEndpoint.host})}))
 
         proxyRequest.on('error', function (error) {
             this.response.writeHead(500)
