@@ -12,7 +12,17 @@ const port = program.port
 
 const app = new Router()
 
-app.addRoute('/zalando-lounge', 'http://www.zalando-lounge.de/')
+app.newRoute()
+    .matchPath('/')
+    .toEndpoint('http://www.zalando-lounge.de')
+    .withFilter('requestHeader', 'Host', 'www.zalando-lounge.de')
+    .save()
+
+app.newRoute()
+    .matchPath('/*path')
+    .toEndpoint('http://www.zalando-lounge.de')
+    .withFilter('requestHeader', 'Host', 'www.zalando-lounge.de')
+    .save()
 
 app.listen(port)
 

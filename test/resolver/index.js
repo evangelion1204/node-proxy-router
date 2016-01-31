@@ -37,6 +37,14 @@ describe('Resolver', function() {
         expect(resolver.match({url: '/test', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
     })
 
+    it('should resolve STRICT path routes even with query params passed', function () {
+        let resolver = new Resolver()
+
+        resolver.addRoute('/test', 'http://domain.tld')
+
+        expect(resolver.match({url: '/test?param=value', method: 'GET'}).endpoint).to.be.equal('http://domain.tld')
+    })
+
     it('should resolve REGEX path route', function () {
         let resolver = new Resolver()
 

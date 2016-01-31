@@ -43,7 +43,7 @@
     "koa-compose": "^2.3.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
-    "radix-tree": "^0.3.3",
+    "radix-tree": "^0.3.4",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.1.0",

@@ -138,7 +138,8 @@ export default class Resolver {
     }
 
     matchPath(tree, request) {
-        let lookup = tree.find(request.url) || tree.find('ANY')
+        let path = url.parse(request.url).pathname
+        let lookup = tree.find(path) || tree.find('ANY')
 
         if (!lookup) {
             return false
