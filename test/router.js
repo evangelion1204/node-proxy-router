@@ -48,6 +48,43 @@ describe('Router', function() {
             })
     })
 
+    it('a http request should pass the used path if the endpoint has none', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(request.url === '/path' ? 200 : 404)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+        router.addRoute('/path', `http://localhost:${configs.routerPort}`)
+
+        request(router.listen())
+            .get('/path')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
+
+
+    it('a http request should pass the query params', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(request.url === '/path?key=value' ? 200 : 404)
+            response.end()
+        }).listen(configs.routerPort)
+
+
+        let router = new Router()
+        router.addRoute('/path', `http://localhost:${configs.routerPort}`)
+
+        request(router.listen())
+            .get('/path?key=value')
+            .expect(200, function () {
+                server.close()
+                done.apply(this, arguments)
+            })
+    })
+
     it('a http request should return the 302 result of the proxied endpoint', function (done) {
         let server = http.createServer(function (request, response) {
             response.writeHead(302, {

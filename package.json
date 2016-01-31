@@ -6,10 +6,12 @@
   "scripts": {
     "predistribute": "babel src --out-dir lib",
     "prestart": "babel src --out-dir lib",
+    "prebasic-example": "babel src --out-dir lib",
     "start": "node --harmony index.js --port 3000 --config ../config/router.json --routes ./config/routes.json",
     "test": "babel-node ./node_modules/.bin/_mocha --harmony --recursive test",
     "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha --harmony",
-    "distribute": "npm publish"
+    "distribute": "npm publish",
+    "basic-example": "node examples/basic/server.js"
   },
   "author": "Michael Iwersen <mi.iwersen@gmail.com>",
   "license": "MIT",
@@ -41,7 +43,7 @@
     "koa-compose": "^2.3.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.4",
-    "radix-tree": "^0.3.3",
+    "radix-tree": "^0.3.4",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.1.0",
