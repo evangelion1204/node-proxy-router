@@ -175,3 +175,19 @@ router.newRoute()
   .withFilter('responseHeader', 'name', 'value')
   .save()
 ```
+
+## Importers
+
+To make it easier to import huge amounts of routes importers are available.
+
+- JSON => reading raw routes from a JSON file
+- eskip => Zalando Skipper compatible file reader
+- REST => reading raw routes from a REST endpoint
+
+All importers use the same interface, pass the router in the constructor and call `read` with the corresponding url/path to the source.
+
+```js
+const importer = new Importer(router)
+
+importer.read('path/url')
+```
