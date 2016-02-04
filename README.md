@@ -184,10 +184,19 @@ To make it easier to import huge amounts of routes importers are available.
 - eskip => Zalando Skipper compatible file reader
 - REST => reading raw routes from a REST endpoint
 
-All importers use the same interface, pass the router in the constructor and call `read` with the corresponding url/path to the source.
+All importers use the same interface, pass the router in the constructor and call `read` with the corresponding url/path to the source, the second param is a callback and optional.
 
 ```js
 const importer = new Importer(router)
 
 importer.read('path/url')
+```
+
+With callback
+```js
+const importer = new Importer(router)
+
+importer.read('path/url', function (err) {
+    if (!err) console.log('import successful')
+})
 ```

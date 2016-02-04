@@ -4,14 +4,15 @@ const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const expect = chai.expect
+const http = require('http')
 
-import Importer from '../../src/importer/json'
+import Importer from '../../src/importer/rest'
 
 import * as exampleConfig from '../builder/configs'
 
 chai.use(sinonChai)
 
-describe('JSON Importer', function() {
+describe('Rest Importer', function() {
     let mockedRouter
 
     beforeEach(function () {
@@ -38,14 +39,22 @@ describe('JSON Importer', function() {
         expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route2'})
     })
 
-    it('read should process the content of a file', function (done) {
+    it('read should process consume a rest endpoint', function (done) {
+        let server = http.createServer(function (request, response) {
+            console.log('R')
+            response.writeHead(200, {"Content-Type": "application/json"})
+            response.end(JSON.stringify(require('../stubs/routes.json')))
+        }).listen(4000)
+
+
         let importer = new Importer(mockedRouter)
 
         importer.process = sinon.spy()
 
-        importer.read(__dirname + '/../stubs/routes.json', function (err) {
+        importer.read('http://localhost:4000', function (err) {
+            server.close()
             expect(importer.process).to.be.calledWith(require('../stubs/routes.json'))
-            done()
+            done(err)
         })
     })
 })

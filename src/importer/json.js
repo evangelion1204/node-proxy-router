@@ -13,10 +13,14 @@ export default class JSON {
         this._router = router
     }
 
-    read(src) {
+    read(src, cb = null) {
         const routes = require(src)
 
         this.process(routes)
+
+        if (cb) {
+            cb()
+        }
 
         return this
     }
