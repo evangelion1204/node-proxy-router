@@ -47,15 +47,26 @@ export default class eskip {
 
         for (let matcher of matchers) {
             const matcherType = matcher.trim().replace(matcherRegex, '$1')
-            const matcherParams = matcher.trim().replace(matcherRegex, '$2').split(',').map(arg => arg.replace(/"/g, ''))
+            const matcherParams = matcher.trim().replace(matcherRegex, '$2').split(',').map(arg => arg.trim().replace(/"/g, ''))
 
             switch (matcherType.toLowerCase()) {
                 case "path":
                     builder.matchPath.apply(builder, matcherParams)
                     break;
-                case "pathregex":
+                case "pathregexp":
                     builder.matchRegexPath.apply(builder, matcherParams)
                     break;
+                case "method":
+                    builder.matchMethod.apply(builder, matcherParams)
+                    break;
+                case "header":
+                    builder.matchHeader.apply(builder, matcherParams)
+                    break;
+                case "headerregexp":
+                    builder.matchRegexHeader.apply(builder, matcherParams)
+                    break;
+                default:
+                    throw new Error(`Unknown matcher ${matcherType}`)
             }
         }
 

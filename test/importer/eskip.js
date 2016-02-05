@@ -38,7 +38,7 @@ describe('eskip Importer', function() {
         expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route2'})
     })
 
-    it('parse should return a parsed route', function () {
+    it('parse should return a strict route', function () {
         let importer = new Importer(mockedRouter)
 
         expect(importer.parse('myroute: Path("/test") -> "http://domain.tld";')).to.deep.equal({
@@ -48,6 +48,44 @@ describe('eskip Importer', function() {
                     match: "/test",
                     type: "STRICT"
                 }
+            },
+            endpoint: "http://domain.tld"
+        })
+    })
+
+    it('parse should return a regexp route', function () {
+        let importer = new Importer(mockedRouter)
+
+        expect(importer.parse('myroute: PathRegexp("^/test") -> "http://domain.tld";')).to.deep.equal({
+            id: "myroute",
+            matcher: {
+                path: {
+                    match: "^/test",
+                    type: "REGEX"
+                }
+            },
+            endpoint: "http://domain.tld"
+        })
+    })
+
+    it('parse should return a combined rule matcher route', function () {
+        let importer = new Importer(mockedRouter)
+
+        expect(importer.parse('myroute: Path("^/test") && Method("POST") && Header("Accept", "application/json") -> "http://domain.tld";')).to.deep.equal({
+            id: "myroute",
+            matcher: {
+                path: {
+                    match: "^/test",
+                    type: "STRICT"
+                },
+                headers: [
+                    {
+                        name: "Accept",
+                        type: "STRICT",
+                        value: "application/json"
+                    }
+                ],
+                method: "POST"
             },
             endpoint: "http://domain.tld"
         })

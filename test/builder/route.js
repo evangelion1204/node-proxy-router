@@ -88,6 +88,13 @@ describe('Route Builder', function() {
         expect(instance.route).to.deep.equal({matcher: {headers: [{name: 'header', value: 'value', type: 'STRICT'}]}})
     })
 
+    it('matchRegexHeader should create a valid route and allow chaining', function () {
+        let instance = new Builder()
+
+        expect(instance.matchRegexHeader('header', '^value$')).to.equal(instance)
+        expect(instance.route).to.deep.equal({matcher: {headers: [{name: 'header', value: '^value$', type: 'REGEX'}]}})
+    })
+
     it('matchMethod should create a valid route and allow chaining', function () {
         let instance = new Builder()
 
