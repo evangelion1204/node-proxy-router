@@ -41,7 +41,6 @@ describe('Rest Importer', function() {
 
     it('read should process consume a rest endpoint', function (done) {
         let server = http.createServer(function (request, response) {
-            console.log('R')
             response.writeHead(200, {"Content-Type": "application/json"})
             response.end(JSON.stringify(require('../stubs/routes.json')))
         }).listen(4000)
