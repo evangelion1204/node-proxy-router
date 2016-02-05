@@ -42,14 +42,14 @@ describe('eskip Importer', function() {
         let importer = new Importer(mockedRouter)
 
         expect(importer.parse('myroute: Path("/test") -> "http://domain.tld";')).to.deep.equal({
-            id: "myroute",
+            id: 'myroute',
             matcher: {
                 path: {
-                    match: "/test",
-                    type: "STRICT"
+                    match: '/test',
+                    type: 'STRICT'
                 }
             },
-            endpoint: "http://domain.tld"
+            endpoint: 'http://domain.tld'
         })
     })
 
@@ -57,36 +57,82 @@ describe('eskip Importer', function() {
         let importer = new Importer(mockedRouter)
 
         expect(importer.parse('myroute: PathRegexp("^/test") -> "http://domain.tld";')).to.deep.equal({
-            id: "myroute",
+            id: 'myroute',
             matcher: {
                 path: {
-                    match: "^/test",
-                    type: "REGEX"
+                    match: '^/test',
+                    type: 'REGEX'
                 }
             },
-            endpoint: "http://domain.tld"
+            endpoint: 'http://domain.tld'
         })
     })
 
     it('parse should return a combined rule matcher route', function () {
         let importer = new Importer(mockedRouter)
 
-        expect(importer.parse('myroute: Path("^/test") && Method("POST") && Header("Accept", "application/json") -> "http://domain.tld";')).to.deep.equal({
-            id: "myroute",
+        expect(importer.parse('myroute: Path("/test") && Method("POST") && Header("Accept", "application/json") -> "http://domain.tld";')).to.deep.equal({
+            id: 'myroute',
             matcher: {
                 path: {
-                    match: "^/test",
-                    type: "STRICT"
+                    match: '/test',
+                    type: 'STRICT'
                 },
                 headers: [
                     {
-                        name: "Accept",
-                        type: "STRICT",
-                        value: "application/json"
+                        name: 'Accept',
+                        type: 'STRICT',
+                        value: 'application/json'
                     }
                 ],
-                method: "POST"
+                method: 'POST'
             },
+            endpoint: 'http://domain.tld'
+        })
+    })
+
+    it('parse should return a matcher and filter route', function () {
+        let importer = new Importer(mockedRouter)
+
+        expect(importer.parse('myroute: Path("/test") -> RequestHeader("X-Server", "Custom") -> "http://domain.tld";')).to.deep.equal({
+            id: 'myroute',
+            matcher: {
+                path: {
+                    match: '/test',
+                    type: 'STRICT'
+                },
+            },
+            filters: [
+                {
+                    name: 'RequestHeader',
+                    args: ['X-Server', 'Custom']
+                }
+            ],
+            endpoint: 'http://domain.tld'
+        })
+    })
+
+    it('parse should return a matcher and multiple filters route', function () {
+        let importer = new Importer(mockedRouter)
+
+        expect(importer.parse('myroute: Path("/test") -> RequestHeader("X-Server", "Custom") -> Cookie("Name", "Header") -> "http://domain.tld";')).to.deep.equal({
+            id: 'myroute',
+            matcher: {
+                path: {
+                    match: '/test',
+                    type: 'STRICT'
+                },
+            },
+            filters: [
+                {
+                    name: 'RequestHeader',
+                    args: ['X-Server', 'Custom']
+                },
+                {
+                    name: 'Cookie',
+                    args: ['Name', 'Header']
+                }
+            ],
             endpoint: "http://domain.tld"
         })
     })

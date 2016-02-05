@@ -33,8 +33,8 @@ export default class eskip {
     parse(definition) {
         const formatRegex = /^(\w+):(.+?);?$/
         const matcherRegex = /^(\w+)\((.*?)\)$/
-        const filterRegex = /^(\w+):(.+?);?$/
-        const routeParts = definition.replace(formatRegex, '$2').split('->')
+        const filterRegex = /^(\w+)\((.*?)\)$/
+        let routeParts = definition.replace(formatRegex, '$2').split('->')
 
         const builder = new RouteBuilder(this._router)
 
@@ -43,7 +43,7 @@ export default class eskip {
             .toEndpoint(routeParts.pop().trim().replace(/"/g, ''))
             //.withFilter('requestHeader', 'Host', 'www.zalando-lounge.de')
 
-        const matchers = routeParts[0].split('&&')
+        const matchers = routeParts.splice(0, 1)[0].split('&&')
 
         for (let matcher of matchers) {
             const matcherType = matcher.trim().replace(matcherRegex, '$1')
@@ -68,6 +68,13 @@ export default class eskip {
                 default:
                     throw new Error(`Unknown matcher ${matcherType}`)
             }
+        }
+
+        for (let filter of routeParts) {
+            const filterName = filter.trim().replace(filterRegex, '$1')
+            const filterParams = filter.trim().replace(filterRegex, '$2').split(',').map(arg => arg.trim().replace(/"/g, ''))
+
+            builder.withFilter(filterName, ...filterParams)
         }
 
         return builder.route
