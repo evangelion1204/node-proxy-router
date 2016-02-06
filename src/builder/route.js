@@ -85,6 +85,20 @@ export default class Route {
         return this
     }
 
+    matchRegexHeader(header, value) {
+        if (!this._route.matcher.headers) {
+            this._route.matcher.headers = []
+        }
+
+        this._route.matcher.headers.push({
+            name: header,
+            value: value,
+            type: REGEX
+        })
+
+        return this
+    }
+
     get route() {
         return this._route
     }

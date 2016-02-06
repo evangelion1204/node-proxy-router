@@ -1,0 +1,34 @@
+[
+  {
+    "id": "/",
+    "matcher": {
+      "path": {
+        "type": "STRICT",
+        "match": "/"
+      }
+    },
+    "filters": [
+      {
+        "name": "requestHeader",
+        "args": ["Host", "www.zalando-lounge.de"]
+      }
+    ],
+    "endpoint": "http://www.zalando-lounge.de"
+  },
+  {
+    "id": "/*path",
+    "matcher": {
+      "path": {
+        "type": "STRICT",
+        "match": "/*path"
+      }
+    },
+    "filters": [
+      {
+        "name": "requestHeader",
+        "args": ["Host", "www.zalando-lounge.de"]
+      }
+    ],
+    "endpoint": "http://www.zalando-lounge.de"
+  }
+]
