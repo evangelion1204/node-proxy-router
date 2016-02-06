@@ -8,6 +8,10 @@ const fs = require('fs')
 
 const logger = Logger.instance()
 
+const formatRegex = /^(\w+):(.+?);?$/
+const filterRegex = /^(\w+)\((.*?)\)$/
+const matcherRegex = /^(\w+)\((.*?)\)$/
+
 export default class eskip {
     constructor(router) {
         this._router = router
@@ -44,9 +48,6 @@ export default class eskip {
     }
 
     parse(definition) {
-        const formatRegex = /^(\w+):(.+?);?$/
-        const matcherRegex = /^(\w+)\((.*?)\)$/
-        const filterRegex = /^(\w+)\((.*?)\)$/
         let routeParts = definition.replace(formatRegex, '$2').split('->')
 
         const builder = new RouteBuilder(this._router)
@@ -55,7 +56,14 @@ export default class eskip {
             .setId(definition.replace(formatRegex, '$1'))
             .toEndpoint(routeParts.pop().trim().replace(/"/g, ''))
 
-        const matchers = routeParts.splice(0, 1)[0].split('&&')
+        this.parseMatchers(builder, routeParts.splice(0, 1)[0])
+        this.parseFilters(builder, routeParts)
+
+        return builder.route
+    }
+
+    parseMatchers(builder, part) {
+        const matchers = part.split('&&')
 
         for (let matcher of matchers) {
             const matcherType = matcher.trim().replace(matcherRegex, '$1')
@@ -82,13 +90,17 @@ export default class eskip {
             }
         }
 
-        for (let filter of routeParts) {
+        return this
+    }
+
+    parseFilters(builder, parts) {
+        for (let filter of parts) {
             const filterName = filter.trim().replace(filterRegex, '$1')
             const filterParams = filter.trim().replace(filterRegex, '$2').split(',').map(arg => arg.trim().replace(/"/g, ''))
 
             builder.withFilter(filterName, ...filterParams)
         }
 
-        return builder.route
+        return this
     }
 }

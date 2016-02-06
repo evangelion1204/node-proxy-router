@@ -56,4 +56,22 @@ describe('Rest Importer', function() {
             done(err)
         })
     })
+
+    it('read should process consume a rest endpoint and transform the result', function (done) {
+        let server = http.createServer(function (request, response) {
+            response.writeHead(200, {"Content-Type": "application/json"})
+            response.end(JSON.stringify({routes: require('../stubs/routes.json')}))
+        }).listen(4000)
+
+
+        let importer = new Importer(mockedRouter, data => data.routes)
+
+        importer.process = sinon.spy()
+
+        importer.read('http://localhost:4000', function (err) {
+            server.close()
+            expect(importer.process).to.be.calledWith(require('../stubs/routes.json'))
+            done(err)
+        })
+    })
 })
