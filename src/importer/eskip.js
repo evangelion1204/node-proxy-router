@@ -14,18 +14,31 @@ export default class eskip {
     }
 
     read(src, cb = null) {
-        fs.readFile(src, function (err, content) {
+        logger.log(`Reading file ${src}`)
+
+        fs.readFile(src, 'utf8', function (err, content) {
             if (err) {
                 return cb(err)
             }
 
-            this.process(JSON.parse(content))
+            console.log(content)
+
+            this.process(content.split('\n'))
 
             if (cb) {
                 cb()
             }
-
         }.bind(this))
+
+        return this
+    }
+
+    process(routes) {
+        for (let route of routes) {
+            if (route.trim() !== '') {
+                this._router.addRawRoute(this.parse(route.trim()))
+            }
+        }
 
         return this
     }
@@ -41,7 +54,6 @@ export default class eskip {
         builder
             .setId(definition.replace(formatRegex, '$1'))
             .toEndpoint(routeParts.pop().trim().replace(/"/g, ''))
-            //.withFilter('requestHeader', 'Host', 'www.zalando-lounge.de')
 
         const matchers = routeParts.splice(0, 1)[0].split('&&')
 
@@ -78,13 +90,5 @@ export default class eskip {
         }
 
         return builder.route
-    }
-
-    process(routes) {
-        for (let route of routes) {
-            this._router.addRawRoute(route)
-        }
-
-        return this
     }
 }

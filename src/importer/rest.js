@@ -15,6 +15,8 @@ export default class Rest {
     }
 
     read(url, cb = null) {
+        logger.log(`Reading from url ${url}`)
+
         const options = {
             uri: url,
             json: true

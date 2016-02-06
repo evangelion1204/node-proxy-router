@@ -14,6 +14,8 @@ export default class JSON {
     }
 
     read(src, cb = null) {
+        logger.log(`Reading file ${src}`)
+
         const routes = require(src)
 
         this.process(routes)

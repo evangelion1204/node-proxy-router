@@ -7,8 +7,6 @@ const expect = chai.expect
 
 import Importer from '../../src/importer/eskip'
 
-import * as exampleConfig from '../builder/configs'
-
 chai.use(sinonChai)
 
 describe('eskip Importer', function() {
@@ -31,11 +29,11 @@ describe('eskip Importer', function() {
     it('process should add a route', function () {
         let importer = new Importer(mockedRouter)
 
-        importer.process([{id: 'route1'}, {id: 'route2'}])
+        importer.process(['route1: Path("/") -> "http://www.domain.tld";', 'route2: Path("/") -> "http://www.domain.tld";'])
 
         expect(mockedRouter.addRawRoute).to.be.calledTwice
-        expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route1'})
-        expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route2'})
+        expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route1', matcher: {path: {type: 'STRICT', match: '/'}}, endpoint: 'http://www.domain.tld'})
+        expect(mockedRouter.addRawRoute).to.be.calledWith({id: 'route2', matcher: {path: {type: 'STRICT', match: '/'}}, endpoint: 'http://www.domain.tld'})
     })
 
     it('parse should return a strict route', function () {
@@ -142,8 +140,8 @@ describe('eskip Importer', function() {
 
         importer.process = sinon.spy()
 
-        importer.read(__dirname + '/../stubs/routes.json', function (err) {
-            expect(importer.process).to.be.calledWith(require('../stubs/routes.json'))
+        importer.read(__dirname + '/../stubs/routes.eskip', function (err) {
+            expect(importer.process).to.be.calledWith(['route1: Path("/") -> "http://domain.tld";'])
             done()
         })
     })

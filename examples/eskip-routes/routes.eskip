@@ -1,0 +1,2 @@
+root: Path("/") -> requestHeader("Host", "www.zalando-lounge.de") -> "http://www.zalando-lounge.de";
+others: Path("/*catchall") -> requestHeader("Host", "www.zalando-lounge.de") -> "http://www.zalando-lounge.de";
