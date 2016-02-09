@@ -1,6 +1,6 @@
 {
   "name": "node-proxy-router",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A reverse proxy / router in node",
   "main": "index.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "koa-compose": "^2.3.0",
     "lodash": "^3.10.1",
     "radix-tree": "^0.3.4",
+    "request-promise": "^2.0.0",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
@@ -51,7 +52,6 @@
     "chai": "^3.4.1",
     "isparta": "^4.0.0",
     "mocha": "^2.3.4",
-    "request-promise": "^2.0.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.1.0"
