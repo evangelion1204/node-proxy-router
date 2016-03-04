@@ -179,4 +179,8 @@ export default class Resolver {
 
         return match.test(request.url)
     }
+
+    getRegisteredRoutesIds() {
+        return Object.keys(this.routeIndex)
+    }
 }

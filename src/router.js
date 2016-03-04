@@ -64,6 +64,10 @@ export default class Router {
         return this
     }
 
+    getRegisteredRoutesIds() {
+        return this.resolver.getRegisteredRoutesIds()
+    }
+
     listen(port) {
         this._server = http.createServer(this.onRequest.bind(this))
 

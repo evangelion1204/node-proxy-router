@@ -26,7 +26,7 @@
     "router",
     "proxy"
   ],
-  "homepage": "https://github.com/evangelion1204/node-proxy-router#readme",
+  "homepage": "https://github.com/evangelion1204/node-proxy-router",
   "dependencies": {
     "co": "^4.6.0",
     "commander": "^2.9.0",
