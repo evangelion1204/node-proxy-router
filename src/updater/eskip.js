@@ -1,13 +1,13 @@
 'use strict'
 
-import Logger from './logger'
+import Logger from '../logger'
 import {Tree} from 'radix-tree'
 
 const _ = require('lodash')
 
 const logger = Logger.instance()
 
-export default class Updater {
+export default class eskip {
     constructor(router) {
         this._router = router
     }

@@ -5,11 +5,11 @@ const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const expect = chai.expect
 
-import Updater from '../src/updater'
+import Updater from '../../src/updater/json'
 
 chai.use(sinonChai)
 
-describe('Updater', function() {
+describe('JSON-Updater', function() {
     let mockedRouter
 
     beforeEach(function () {
@@ -45,8 +45,8 @@ describe('Updater', function() {
         updater.process = sinon.spy()
         mockedRouter.getRegisteredRoutesIds.returns(['route1', 'route2'])
 
-        updater.read(__dirname + '/stubs/delta-routes.json', function (err) {
-            expect(updater.process).to.be.calledWith(require(__dirname + '/stubs/delta-routes.json'), ['route1'])
+        updater.read(__dirname + '/../stubs/delta-routes.json', function (err) {
+            expect(updater.process).to.be.calledWith(require(__dirname + '/../stubs/delta-routes.json'), ['route1'])
             done()
         })
     })
